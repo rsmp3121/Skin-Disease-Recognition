@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Edit Doctor</title>
+  </head>
+
+  <body>
+    <form
+      action="/adm_view_doctor"
+      method="get"
+      enctype="multipart/form-data"
+      name="form1"
+      id="form1"
+    >
+      <table width="413" border="1">
+        <tr>
+          <td width="97">
+            <em><strong>Name</strong></em>
+          </td>
+          <td colspan="2">
+            <label for="textfield6"></label>
+            <input
+              name="edit_doctor_name"
+              type="text"
+              id="textfield6"
+              size="50"
+              value="{{val['name']}}"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <em><strong>Gender</strong></em>
+          </td>
+
+          <td width="140">
+            {%if val['gender']=='M'%}
+            <input
+              type="radio"
+              name="edit_doctor_gender"
+              id="radio"
+              value="male"
+              checked="checked"
+            />
+            <label for="radio"
+              ><strong><em>M</em></strong></label
+            ><br />
+            <input
+              type="radio"
+              name="edit_doctor_gender"
+              id="radio"
+              value="female"
+            />
+            <label for="radio"
+              ><strong><em>F</em></strong></label
+            >
+            <!-- -------------------------- -->
+
+            {%endif%} {%if val['gender']=='F'%}
+            <input
+              type="radio"
+              name="edit_doctor_gender"
+              id="radio"
+              value="female"
+              checked="checked"
+            />
+            <em
+              ><strong>
+                <label for="radio">F</label>
+              </strong> </em
+            ><br />
+            <input
+              type="radio"
+              name="edit_doctor_gender"
+              id="radio"
+              value="male"
+            />
+            <em
+              ><strong>
+                <label for="radio">M</label>
+              </strong>
+            </em>
+
+            {%endif%}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <em><strong>Qualification</strong></em>
+          </td>
+          <td colspan="2">
+            <label for="textfield12"></label>
+            <input
+              name="edit_doctor_qualification"
+              type="text"
+              id="textfield12"
+              size="50"
+              value="{{val['qualification']}}"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <em><strong>Experience</strong></em>
+          </td>
+          <td colspan="2">
+            <label for="textfield13"></label>
+            <input
+              name="edit_doctor_experience"
+              type="text"
+              id="textfield13"
+              size="50"
+              value="{{val['experience']}}"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <em><strong>Image</strong></em>
+          </td>
+          <td colspan="2">
+            <label for="fileField"></label>
+            <input
+              type="file"
+              name="edit_doctor_image"
+              id="fileField"
+              value="{{val['image']}}"
+            />
+            <!-- <img
+              src="{{val['image']}}"
+              alt="image"
+              height="150px"
+              width="150px"
+            /> -->
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <em><strong>Place</strong></em>
+          </td>
+          <td colspan="2">
+            <label for="textfield14"></label>
+            <input
+              name="edit_doctor_place"
+              type="text"
+              id="textfield14"
+              size="50"
+              value="{{val['place']}}"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <em><strong>Post</strong></em>
+          </td>
+          <td colspan="2">
+            <label for="textfield16"></label>
+            <input
+              name="edit_doctor_post"
+              type="text"
+              id="textfield16"
+              size="50"
+              value="{{val['post']}}"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <em><strong>PIN</strong></em>
+          </td>
+          <td colspan="2">
+            <label for="textfield17"></label>
+            <input
+              name="edit_doctor_pin"
+              type="text"
+              id="textfield17"
+              size="50"
+              value="{{val['pin']}}"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <em><strong>Email</strong></em>
+          </td>
+          <td colspan="2">
+            <label for="textfield18"></label>
+
+            <input
+              name="edit_doctor_email"
+              type="text"
+              id="textfield18"
+              size="50"
+              value="{{val['email']}}"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <em><strong>Contact</strong></em>
+          </td>
+          <td colspan="2">
+            <label for="textfield19"></label>
+            <input
+              name="edit_doctor_contact"
+              type="text"
+              id="textfield19"
+              size="50"
+              value="{{val['contact']}}"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3">
+            <div align="center">
+              <input type="submit" name="button" id="button" value="UPDATE" />
+            </div>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </body>
+</html>

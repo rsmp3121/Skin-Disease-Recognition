@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>View Doctor Form</title>
+  </head>
+
+  <body>
+    <form id="form1" name="form1" method="post" action="">
+      <table width="1136" height="146" border="1">
+        <tr>
+          <td height="33" colspan="10">
+            <label for="textfield"></label>
+            <div align="right">
+              <input name="textfield" type="text" id="textfield" size="30" />
+              <input type="submit" name="button" id="button" value="Search" />
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td width="40" height="44">
+            <div align="center">
+              <em><strong>slno</strong></em>
+            </div>
+          </td>
+          <td width="130">
+            <div align="center">
+              <em><strong>Name</strong></em>
+            </div>
+          </td>
+          <td width="134">
+            <div align="center">
+              <em><strong>Gender</strong></em>
+            </div>
+          </td>
+          <td width="141">
+            <div align="center">
+              <em><strong>Qualification</strong></em>
+            </div>
+          </td>
+          <td width="155">
+            <div align="center">
+              <em><strong>Experience</strong></em>
+            </div>
+          </td>
+          <!-- <td width="153">
+            <div align="center">
+              <em><strong>Image</strong></em>
+            </div>
+          </td> -->
+          <td width="153">
+            <div align="center">
+              <em><strong>Address</strong></em>
+            </div>
+          </td>
+          <td width="138">
+            <div align="center">
+              <em><strong>Email</strong></em>
+            </div>
+          </td>
+          <td width="132">
+            <div align="center">
+              <em><strong>Contact</strong></em>
+            </div>
+          </td>
+          <td width="55">&nbsp;</td>
+        </tr>
+        {%for i in val%}
+        <tr align="center">
+          <td>{{loop.index}}</td>
+          <td>
+            {{i['name']}}
+            <img src="{{i['image']}}" alt="" height="100" width="100" />
+          </td>
+          <td>{{i['gender']}}</td>
+          <td>{{i['qualification']}}</td>
+          <td>{{i['experience']}}</td>
+          <!-- <td></td> -->
+          <td>{{i['place']}},{{i['post']}},{{i['pin']}}</td>
+
+          <td>{{i['email']}}</td>
+          <td>{{i['contact']}}</td>
+          <td>
+            <p align="center">
+              <em
+                ><strong
+                  ><a href="/adm_edit_doctor/{{i['doctor_id']}}"
+                    >Edit</a
+                  ></strong
+                ></em
+              >
+            </p>
+            <p align="center">
+              <em
+                ><strong
+                  ><a href="/adm_delete_doctor/{{ i['doctor_id'] }}"
+                    >Delete</a
+                  ></strong
+                ></em
+              >
+            </p>
+          </td>
+        </tr>
+        {%endfor%}
+      </table>
+    </form>
+  </body>
+</html>
