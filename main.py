@@ -1,7 +1,7 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 from DBConnection import Db
 app = Flask(__name__)
-
+app.secret_key = "abc"
 #--------------add-disease--and--view-disease--and--edit-disease---and-delete-disease-begins-----------------------------------------------------------------#
 
 
@@ -42,10 +42,41 @@ def adm_view_disease():
 @app.route('/adm_edit_disease/<disease_id>')
 def adm_edit_disease(disease_id):
     e = Db()
+    session['disease_id'] = disease_id
     qry = "SELECT * FROM disease WHERE disease_id='" + disease_id + "'"
     ans = e.selectOne(qry)
     print(ans)
     return render_template('/admin/edit_disease.html', val=ans)
+
+
+@app.route('/adm_edit_disease_post', methods=['post'])
+def adm_edit_disease_post():
+    e = Db()
+    name = request.form['edit_disease_name']
+
+    description = request.form['edit_disease_description']
+    if "edit_disease_image" in request.files:
+        image = request.files['edit_disease_image']
+        if image.filename != "":
+            image.save(
+                "F:\\Skin_Disease_Recogniton\\static\\disease_images\\" + image.filename)
+            path = "static/disease_images/" + image.filename
+            qry = "UPDATE disease SET NAME='"+name+"',image='"+path+"',descriptions='" + \
+                description+"' WHERE disease_id= '" + \
+                str(session['disease_id'])+"'"
+            res = e.update(qry)
+        else:
+            qry = "UPDATE disease SET NAME='"+name+"',descriptions='" + \
+                description+"' WHERE disease_id= '" + \
+                str(session['disease_id'])+"'"
+            res = e.update(qry)
+    else:
+        qry = "UPDATE disease SET NAME='"+name+"',descriptions='" + \
+            description+"' WHERE disease_id= '" + \
+            str(session['disease_id'])+"'"
+        res = e.update(qry)
+    return adm_view_disease()
+
     #***********edit-disease-ends**************#
 
     #***********delete-disease-begins**********#
@@ -61,9 +92,9 @@ def delete_student(disease_id):
     #*******delete-disease-ends***************#
 
 
-#--------------add-disease--and--view-disease--and--edit-disease--and --delete-disease ends-------------------------------------------#
+#--------------add-disease--and--view-disease--and--edit-disease--and --delete-disease ends---------------------------------------------------------------#
 
-#--------------add-doctor--and--view-doctor--and--edit-doctor--and --delete-doctor begins---------------------------------------------#
+#--------------add-doctor--and--view-doctor--and--edit-doctor--and --delete-doctor begins-----------------------------------------------------------------#
 
 @app.route("/adm_add_doctor")
 def adm_add_doctor():
@@ -88,11 +119,11 @@ def adm_add_doctor_post():
     contact = request.form['add_doctor_contact']
     qry1 = "INSERT INTO login(username,PASSWORD,usertype)VALUES('" + \
         email+"','"+contact+"','doctor')"
-    res1 = i.insert(qry1)
+    res = i.insert(qry1)
     qry = "INSERT INTO doctor(NAME,gender,qualification,experience,image,place,post,pin,email,contact,login_id)VALUES('"+name+"','" + \
         gender+"','"+qualification+"','"+experience+"','"+path+"','" + \
         place+"','"+post+"','"+pin+"','"+email + \
-        "','"+contact+"','"+str(res1)+"')"
+        "','"+contact+"','"+str(res)+"')"
 
     ans = i.insert(qry)
     return adm_view_doctor()
@@ -115,10 +146,49 @@ def adm_view_doctor():
 @app.route('/adm_edit_doctor/<doctor_id>')
 def adm_edit_doctor(doctor_id):
     e = Db()
+    session['doctor_id'] = doctor_id
     qry = "SELECT * FROM doctor WHERE doctor_id='" + doctor_id + "'"
     ans = e.selectOne(qry)
     print(ans)
     return render_template('/admin/edit_doctor.html', val=ans)
+
+
+@app.route('/adm_edit_doctor_post', methods=['post'])
+def adm_edit_doctor_post():
+    e = Db()
+    name = request.form['edit_doctor_name']
+    gender = request.form['edit_doctor_gender']
+    qualification = request.form['edit_doctor_qualification']
+    experience = request.form['edit_doctor_experience']
+
+    place = request.form['edit_doctor_place']
+    post = request.form['edit_doctor_post']
+    pin = request.form['edit_doctor_pin']
+    email = request.form['edit_doctor_email']
+    contact = request.form['edit_doctor_contact']
+    if "edit_doctor_image" in request.files:
+        image = request.files['edit_doctor_image']
+        if image.filename != "":
+            image.save(
+                'F:\\Skin_Disease_Recogniton\\static\\disease_images\\' + image.filename)
+            path = '/static/disease_images/'+image.filename
+            qry = "UPDATE doctor SET NAME='"+name+"',gender='"+gender+"',qualification='"+qualification+"',experience='"+experience+"',image='"+image + \
+                "',place='"+place+"',post='"+post+"',pin='"+pin+"',email='"+email + \
+                "',contact='"+contact+"' WHERE doctor_id='" + \
+                str(session['doctor_id'])+"'"
+            res = e.update(qry)
+        else:
+            qry = "UPDATE doctor SET NAME='"+name+"',gender='"+gender+"',qualification='"+qualification+"',experience='"+experience+"',place='" + \
+                place+"',post='"+post+"',pin='"+pin+"',email='"+email+"',contact='" + \
+                contact+"' WHERE doctor_id='"+str(session['doctor_id'])+"'"
+            res = e.update(qry)
+    else:
+        qry = "UPDATE doctor SET NAME='"+name+"',gender='"+gender+"',qualification='"+qualification+"',experience='"+experience+"',image='"+image + \
+            "',place='"+place+"',post='"+post+"',pin='"+pin+"',email='"+email + \
+            "',contact='"+contact+"' WHERE doctor_id='" + \
+            str(session['doctor_id'])+"'"
+        res = e.update(qry)
+    return adm_view_doctor()
 
     #*******-edit doctor ends-****************#
 
@@ -133,15 +203,15 @@ def adm_delete_doctor(doctor_id):
     return adm_view_doctor()
 
     #*********delete doctor ends**************#
-#--------------add-doctor--and--view-doctor ends-------------------------------------------------------------#
+#--------------add-doctor--and--view-doctor ends---------------------------------------------------------------------------------------------------------#
 
-#--------------admin-begins----------------------------------------------------------------------------------#
+#--------------admin-begins------------------------------------------------------------------------------------------------------------------------------#
 
 
 @app.route("/adm_admin")
 def adm_admin():
     return render_template('/admin/Admin.html')
-#--------------amdin-ends---------------------------------------#
+#--------------amdin-ends-------------------------------------------------------------------------------------------------#
 
 
 #---------------login-------------------------------------------#
