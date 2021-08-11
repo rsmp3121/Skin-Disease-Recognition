@@ -172,7 +172,7 @@ def adm_edit_doctor_post():
             image.save(
                 'F:\\Skin_Disease_Recogniton\\static\\disease_images\\' + image.filename)
             path = '/static/disease_images/'+image.filename
-            qry = "UPDATE doctor SET NAME='"+name+"',gender='"+gender+"',qualification='"+qualification+"',experience='"+experience+"',image='"+image + \
+            qry = "UPDATE doctor SET NAME='"+name+"',gender='"+gender+"',qualification='"+qualification+"',experience='"+experience+"',image='"+path + \
                 "',place='"+place+"',post='"+post+"',pin='"+pin+"',email='"+email + \
                 "',contact='"+contact+"' WHERE doctor_id='" + \
                 str(session['doctor_id'])+"'"
@@ -183,8 +183,7 @@ def adm_edit_doctor_post():
                 contact+"' WHERE doctor_id='"+str(session['doctor_id'])+"'"
             res = e.update(qry)
     else:
-        qry = "UPDATE doctor SET NAME='"+name+"',gender='"+gender+"',qualification='"+qualification+"',experience='"+experience+"',image='"+image + \
-            "',place='"+place+"',post='"+post+"',pin='"+pin+"',email='"+email + \
+        qry = "UPDATE doctor SET NAME='"+name+"',gender='"+gender+"',qualification='"+qualification+"',experience='"+experience+"',place='"+place+"',post='"+post+"',pin='"+pin+"',email='"+email + \
             "',contact='"+contact+"' WHERE doctor_id='" + \
             str(session['doctor_id'])+"'"
         res = e.update(qry)
