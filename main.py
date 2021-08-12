@@ -34,6 +34,19 @@ def adm_view_disease():
     res = v.select(qry)
     print(res)
     return render_template('/admin/view_disease.html', val=res)
+
+    #disease_search_section_starts#
+
+
+@app.route('/adm_view_disease_post', methods=['post'])
+def adm_view_disease_post():
+    v = Db()
+    name = request.form['disease_search_name']
+    qry = "SELECT * FROM disease WHERE NAME LIKE '%"+name+"%'"
+    res = v.select(qry)
+    print(res)
+    return render_template('/admin/view_disease.html', val=res)
+    #disease_search_section_ends#
     #***********view-disease-ends**************#
 
     #***********edit-disease-begins************#
@@ -138,6 +151,19 @@ def adm_view_doctor():
     res = v.select(qry)
     print(res)
     return render_template('/admin/view_doctor.html', val=res)
+
+    #doctor_search_section_starts#
+
+
+@app.route('/adm_view_doctor_post', methods=['post'])
+def adm_view_doctor_post():
+    v = Db()
+    name = request.form['doctor_search_name']
+    qry = "SELECT * FROM doctor WHERE NAME LIKE '%"+name+"%'"
+    res = v.select(qry)
+    print(res)
+    return render_template('/admin/view_doctor.html', val=res)
+    #doctor_search_section_ends#
     #********viewdoctor ends****************#
 
     #********edit doctor begins*************#
@@ -210,7 +236,7 @@ def adm_delete_doctor(doctor_id):
 @app.route("/adm_admin")
 def adm_admin():
     return render_template('/admin/Admin.html')
-#--------------amdin-ends-------------------------------------------------------------------------------------------------#
+#--------------admin-ends-------------------------------------------------------------------------------------------------#
 
 
 #---------------login-------------------------------------------#
@@ -226,10 +252,19 @@ def adm_login_post():
     i = Db()
     username = request.form['login_name']
     password = request.form['login_password']
-    qry = "INSERT INTO login(username,PASSWORD)VALUES('" + \
-        username+"','"+password+"')"
-    ans = i.insert(qry)
-    return adm_login()
+    qry = "SELECT * FROM login WHERE username='" + \
+        username+"' AND PASSWORD='"+password+"'"
+    ans = i.selectOne(qry)
+    if ans is not None:
+        type = ans['usertype']
+        if type == 'admin':
+            return render_template('/admin/Admin.html')
+        else:
+            return 'Invalid Username/Password'
+    else:
+        return 'Invalid Username/Password'
+
+
 #---------------login ends--------------------------------------#
 
 #--------------------feedback-begins----------------------------#
@@ -237,7 +272,13 @@ def adm_login_post():
 
 @app.route('/adm_view_feedback')
 def adm_view_feedback():
-    return render_template('/admin/view_feedback.html')
+    v = Db()
+    qry = "SELECT feedback.*,user.* FROM USER,feedback WHERE feedback.user_id = user.login_id"
+    ans = v.select(qry)
+    print(ans)
+    return render_template('/admin/view_feedback.html', val=ans)
+
+
 #---------------------feedback-ends----------------------------#
 
 #--------------------user-begins-------------------------------#
@@ -245,7 +286,24 @@ def adm_view_feedback():
 
 @app.route('/adm_view_user')
 def adm_view_user():
-    return render_template('/admin/view_user.html')
+    v = Db()
+    qry = "SELECT * FROM USER"
+    ans = v.select(qry)
+    print(ans)
+    return render_template('/admin/view_user.html', val=ans)
+
+    #*******user_search_section_starts******#
+
+
+@app.route('/adm_view_user_post', methods=['post'])
+def adm_view_user_post():
+    v = Db()
+    name = request.form['user_search_name']
+    qry = "SELECT * FROM user WHERE NAME LIKE '%"+name+"%'"
+    res = v.select(qry)
+    print(res)
+    return render_template('/admin/view_user.html', val=res)
+    #*******user_search_section_ends******#
 
 #------------------------user-ends-----------------------------#
 
