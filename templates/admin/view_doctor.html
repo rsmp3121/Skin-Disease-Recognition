@@ -12,7 +12,12 @@
           <td height="33" colspan="10">
             <label for="textfield"></label>
             <div align="right">
-              <input name="doctor_search_name" type="text" id="textfield" size="30" />
+              <input
+                name="doctor_search_name"
+                type="text"
+                id="textfield"
+                size="30"
+              />
               <input type="submit" name="button" id="button" value="Search" />
             </div>
           </td>
@@ -69,7 +74,7 @@
         <tr align="center">
           <td>{{loop.index}}</td>
           <td>
-            {{i['name']}}
+            {{i['name']}}<br />
             <img src="{{i['image']}}" alt="image" height="100" width="100" />
           </td>
           <td>{{i['gender']}}</td>

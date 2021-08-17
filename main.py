@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, session
 from DBConnection import Db
 app = Flask(__name__)
 app.secret_key = "abc"
+# -------------------------------------------------------------------------------------------------------------------------------#
+#Admin Begins#
+# -------------------------------------------------------------------------------------------------------------------------------#
 #--------------add-disease--and--view-disease--and--edit-disease---and-delete-disease-begins-----------------------------------------------------------------#
 
 
@@ -15,8 +18,7 @@ def adm_add_disease_post():
     i = Db()
     name = request.form['add_disease_name']
     image = request.files['add_disease_image']
-    image.save(
-        'F:\\Skin_Disease_Recogniton\\static\\disease_images\\' + image.filename)
+    image.save('C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\disease_images\\'+image.filename)
     path = '/static/disease_images/'+image.filename
     description = request.form['add_disease_description']
     qry = "INSERT INTO disease(NAME,image,descriptions)VALUES('" + \
@@ -72,7 +74,7 @@ def adm_edit_disease_post():
         image = request.files['edit_disease_image']
         if image.filename != "":
             image.save(
-                "F:\\Skin_Disease_Recogniton\\static\\disease_images\\" + image.filename)
+                "C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\disease_images\\" + image.filename)
             path = "static/disease_images/" + image.filename
             qry = "UPDATE disease SET NAME='"+name+"',image='"+path+"',descriptions='" + \
                 description+"' WHERE disease_id= '" + \
@@ -123,7 +125,7 @@ def adm_add_doctor_post():
     experience = request.form['add_doctor_experience']
     image = request.files['add_doctor_image']
     image.save(
-        'F:\\Skin_Disease_Recogniton\\static\\disease_images\\' + image.filename)
+        'C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\disease_images\\' + image.filename)
     path = '/static/disease_images/'+image.filename
     place = request.form['add_doctor_place']
     post = request.form['add_doctor_post']
@@ -196,7 +198,7 @@ def adm_edit_doctor_post():
         image = request.files['edit_doctor_image']
         if image.filename != "":
             image.save(
-                'F:\\Skin_Disease_Recogniton\\static\\disease_images\\' + image.filename)
+                'C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\disease_images\\' + image.filename)
             path = '/static/disease_images/'+image.filename
             qry = "UPDATE doctor SET NAME='"+name+"',gender='"+gender+"',qualification='"+qualification+"',experience='"+experience+"',image='"+path + \
                 "',place='"+place+"',post='"+post+"',pin='"+pin+"',email='"+email + \
@@ -230,16 +232,16 @@ def adm_delete_doctor(doctor_id):
     #*********delete doctor ends**************#
 #--------------add-doctor--and--view-doctor ends---------------------------------------------------------------------------------------------------------#
 
-#--------------admin-begins------------------------------------------------------------------------------------------------------------------------------#
+#--------------admin route-begins------------------------------------------------------------------------------------------------------------------------------#
 
 
 @app.route("/adm_admin")
 def adm_admin():
     return render_template('/admin/Admin.html')
-#--------------admin-ends-------------------------------------------------------------------------------------------------#
+#--------------admin route-ends-------------------------------------------------------------------------------------------------#
 
 
-#---------------login-------------------------------------------#
+#---------------login------------------------------------------------------------------------------------------------------#
 
 
 @app.route("/adm_login")
@@ -306,6 +308,48 @@ def adm_view_user_post():
     #*******user_search_section_ends******#
 
 #------------------------user-ends-----------------------------#
+
+# -------------------------------------------------------------------------------------------------------------------------------#
+    #Admin Ends#
+# -------------------------------------------------------------------------------------------------------------------------------#
+
+
+# -------------------------------------------------------------------------------------------------------------------------------#
+    #Doctor Begins#
+# -------------------------------------------------------------------------------------------------------------------------------#
+
+
+@app.route('/doctor_view_disease')
+def doctor_view_disease():
+    v = Db()
+    qry = "SELECT * FROM disease"
+    res = v.select(qry)
+    print(res)
+    return render_template('/doctor/doctor_view_disease.html', val=res)
+
+
+@app.route('/doctor_schedule_management')
+def doctor_schedule_management():
+    return render_template('/doctor/doctor_schedule_management.html')
+
+
+# @app.route('/doctor_view_profile')
+# def doctor_view_profile():
+#     return "To begin from here."
+#     # "return render_template('/doctor/doctor_view_profile.html')"
+
+@app.route('/doctor_view_profile', methods=['get'])
+def doctor_view_profile():
+    v = Db()
+    print('this is view Section')
+    qry = "SELECT * FROM doctor"
+    res = v.selectOne(qry)
+    print(res)
+    return render_template('/doctor/doctor_view_profile.html', val=res)
+
+# -------------------------------------------------------------------------------------------------------------------------------#
+    #Doctor Ends#
+# -------------------------------------------------------------------------------------------------------------------------------#
 
 
 if __name__ == "__main__":
