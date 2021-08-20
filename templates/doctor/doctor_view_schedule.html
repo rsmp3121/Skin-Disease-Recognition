@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Untitled Document</title>
+  </head>
+
+  <body>
+    <form
+      id="form1"
+      name="form1"
+      method="post"
+      action="/doctor_view_schedule_post"
+    >
+      <table width="548" height="138" border="1">
+        <tr>
+          <td height="31" colspan="4">
+            <label for="textfield"></label>
+            <div align="right">
+              <input
+                name="search_schedule_date"
+                type="text"
+                id="textfield"
+                size="35"
+              />
+              <input type="submit" name="button" id="button" value="search" />
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td width="115" height="36"><div align="center">From</div></td>
+          <td width="134"><div align="center">To</div></td>
+          <td width="146"><div align="center">Date</div></td>
+          <td width="125">&nbsp;</td>
+        </tr>
+        {%for i in val%}
+        <tr align="center">
+          <td height="61">{{i['from_time']}}</td>
+          <td>{{i['to_time']}}</td>
+          <td>{{i['date']}}</td>
+          <td>
+            <p align="center">
+              <a href="/doctor_edit_schedule/{{i['schedule_id']}}">Edit</a>
+            </p>
+            <p align="center">
+              <a href="/doctor_delete_schedule/{{i['schedule_id']}}">Delete</a>
+            </p>
+          </td>
+        </tr>
+        {%endfor%}
+      </table>
+    </form>
+  </body>
+</html>

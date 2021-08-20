@@ -261,6 +261,9 @@ def adm_login_post():
         type = ans['usertype']
         if type == 'admin':
             return render_template('/admin/Admin.html')
+        elif type == 'doctor':
+            session["lid"] = ans["login_id"]
+            return render_template('/doctor/home.html')
         else:
             return 'Invalid Username/Password'
     else:
@@ -277,7 +280,7 @@ def adm_view_feedback():
     v = Db()
     qry = "SELECT feedback.*,user.* FROM USER,feedback WHERE feedback.user_id = user.login_id"
     ans = v.select(qry)
-    print(ans)
+
     return render_template('/admin/view_feedback.html', val=ans)
 
 
@@ -291,7 +294,7 @@ def adm_view_user():
     v = Db()
     qry = "SELECT * FROM USER"
     ans = v.select(qry)
-    print(ans)
+
     return render_template('/admin/view_user.html', val=ans)
 
     #*******user_search_section_starts******#
@@ -303,7 +306,7 @@ def adm_view_user_post():
     name = request.form['user_search_name']
     qry = "SELECT * FROM user WHERE NAME LIKE '%"+name+"%'"
     res = v.select(qry)
-    print(res)
+
     return render_template('/admin/view_user.html', val=res)
     #*******user_search_section_ends******#
 
@@ -315,17 +318,21 @@ def adm_view_user_post():
 
 
 # -------------------------------------------------------------------------------------------------------------------------------#
-    #Doctor Begins#
+    # Doctor Begins#             /\/\/\/\/\/\/\\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\\/\/\/\/\/\/\/
 # -------------------------------------------------------------------------------------------------------------------------------#
 
-
+# -----------------------------------doctor-view-disease-section-begins----------------------------------------------------------------#
 @app.route('/doctor_view_disease')
 def doctor_view_disease():
     v = Db()
     qry = "SELECT * FROM disease"
     res = v.select(qry)
-    print(res)
     return render_template('/doctor/doctor_view_disease.html', val=res)
+# -----------------------------------doctor-view-disease-section-ends----------------------------------------------------------------#
+
+# schedule section begins--------------------------------------------------------------------------------------------------------------
+
+# adding schedule by doctor begins
 
 
 @app.route('/doctor_schedule_management')
@@ -333,22 +340,184 @@ def doctor_schedule_management():
     return render_template('/doctor/doctor_schedule_management.html')
 
 
-# @app.route('/doctor_view_profile')
-# def doctor_view_profile():
-#     return "To begin from here."
-#     # "return render_template('/doctor/doctor_view_profile.html')"
+@app.route('/doctor_schedule_management_post', methods=['post'])
+def doctor_schedule_management_post():
+    i = Db()
+    from_time = request.form['from_time']
+    to_time = request.form['to_time']
+    date = request.form['date']
+    qry = "INSERT INTO SCHEDULE(DATE,from_time,to_time,doctor_id)VALUES('"+date+"','" + \
+        from_time+"','"+to_time+"','"+str(session['lid'])+"')"
+    ans = i.insert(qry)
+    print(ans)
+    return doctor_schedule_management()
+# adding schedule by doctor begins
 
-@app.route('/doctor_view_profile', methods=['get'])
+
+@app.route('/doctor_view_schedule')
+def doctor_view_schedule():
+    v = Db()
+    qry = "SELECT * FROM SCHEDULE WHERE doctor_id='"+str(session['lid'])+"'"
+    ans = v.select(qry)
+    print(ans)
+    return render_template('/doctor/doctor_view_schedule.html', val=ans)
+
+
+@app.route('/doctor_view_schedule_post', methods=['post'])
+def doctor_view_schedule_post():
+    s = Db()
+    search_date = request.form['search_schedule_date']
+    qry = "SELECT * FROM schedule WHERE date LIKE '%" + \
+        search_date+"%' AND doctor_id='"+str(session['lid'])+"'"
+    ans = s.select(qry)
+    return render_template('/doctor/doctor_view_schedule.html', val=ans)
+
+
+@app.route('/doctor_edit_schedule/<schedule_id>')
+def doctor_edit_schedule(schedule_id):
+    e = Db()
+    session['schedule_id'] = schedule_id
+    qry = "SELECT * FROM SCHEDULE WHERE schedule_id='" + schedule_id + "'"
+    ans = e.selectOne(qry)
+    print('---------------------')
+    print(ans)
+    return render_template('/doctor/doctor_edit_schedule.html', val=ans)
+
+
+@app.route('/doctor_edit_schedule_post', methods=['post'])
+def doctor_edit_schedule_post():
+    e = Db()
+    from_time = request.form['from_time']
+    to_time = request.form['to_time']
+    date = request.form['date']
+    qry = "UPDATE SCHEDULE SET from_time='"+from_time+"' ,to_time='"+to_time + \
+        "',DATE='"+date+"' WHERE schedule_id='"+str(session['schedule_id'])+"'"
+    ans = e.update(qry)
+    return doctor_view_schedule()
+
+
+@app.route('/doctor_delete_schedule/<schedule_id>')
+def doctor_delete_schedule(schedule_id):
+    d = Db()
+
+    qry = "DELETE FROM SCHEDULE WHERE schedule_id='"+schedule_id+"'"
+
+    res = d.delete(qry)
+    return doctor_view_schedule()
+
+# schedule section ends--------------------------------------------------------------------------------------------------------------
+
+
+# doctor-view-profile-section begins--------------------------------------------------------------------------------------------------------------
+
+@app.route('/doctor_view_profile')
 def doctor_view_profile():
     v = Db()
-    print('this is view Section')
-    qry = "SELECT * FROM doctor"
+
+    qry = "SELECT * FROM doctor where login_id='"+str(session["lid"])+"'"
     res = v.selectOne(qry)
-    print(res)
+
     return render_template('/doctor/doctor_view_profile.html', val=res)
 
+
+@app.route('/doctor_view_profile_post', methods=['post'])
+def doctor_view_profile_post():
+    e = Db()
+    lid = session['lid']
+    name = request.form['edit_doctor_name']
+    gender = request.form['edit_doctor_gender']
+    qualification = request.form['edit_doctor_qualification']
+    experience = request.form['edit_doctor_experience']
+
+    place = request.form['edit_doctor_place']
+    post = request.form['edit_doctor_post']
+    pin = request.form['edit_doctor_pin']
+    email = request.form['edit_doctor_email']
+    contact = request.form['edit_doctor_contact']
+    if "edit_doctor_image" in request.files:
+        print("S")
+        image = request.files['edit_doctor_image']
+        if image.filename != "":
+            image.save(
+                'C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\disease_images\\' + image.filename)
+            path = '/static/disease_images/'+image.filename
+            qry = "UPDATE doctor SET NAME='"+name+"',gender='"+gender+"',qualification='"+qualification+"',experience='"+experience+"',image='"+path + \
+                "',place='"+place+"',post='"+post+"',pin='"+pin+"',email='"+email + \
+                "',contact='"+contact+"' WHERE login_id='" + \
+                str(lid)+"'"
+            res = e.update(qry)
+        else:
+            qry = "UPDATE doctor SET NAME='"+name+"',gender='"+gender+"',qualification='"+qualification+"',experience='"+experience+"',place='" + \
+                place+"',post='"+post+"',pin='"+pin+"',email='"+email+"',contact='" + \
+                contact+"' WHERE login_id='"+str(lid)+"'"
+            res = e.update(qry)
+    else:
+        qry = "UPDATE doctor SET NAME='"+name+"',gender='"+gender+"',qualification='"+qualification+"',experience='"+experience+"',place='"+place+"',post='"+post+"',pin='"+pin+"',email='"+email + \
+            "',contact='"+contact+"' WHERE login_id='" + \
+            str(lid)+"'"
+        res = e.update(qry)
+        # print(res)
+    return doctor_view_profile()
+
+# doctor-view-profile-section ends--------------------------------------------------------------------------------------------------------------
+
+# doctor-view-user-section begins--------------------------------------------------------------------------------------------------------------
+
+
+@app.route('/doctor_view_user')
+def doctor_view_user():
+    v = Db()
+    qry = "SELECT * FROM user"
+    ans = v.select(qry)
+    print(ans)
+    return render_template('/doctor/doctor_view_user.html', val=ans)
+
+
+@app.route('/doctor_view_user_post', methods=['post'])
+def doctor_view_user_post():
+    v = Db()
+    name = request.form['user_search_name']
+    qry = "SELECT * FROM user WHERE NAME LIKE '%"+name+"%'"
+    res = v.select(qry)
+    print(res)
+    return render_template('/doctor/doctor_view_user.html', val=res)
+# doctor-view-user-section ends--------------------------------------------------------------------------------------------------------------
+
+# doctor-change_password-section begins--------------------------------------------------------------------------------------------------------------
+
+
+@app.route('/doctor_change_password')
+def doctor_change_password():
+    return render_template('/doctor/doctor_change_password.html')
+
+
+@app.route('/doctor_change_password_post', methods=['post', 'get'])
+def doctor_change_password_post():
+    v = Db()
+    current_password = request.form['current_password']
+    new_password = request.form['new_password']
+    confirm_password = request.form['confirm_password']
+    qry = "SELECT * FROM login WHERE login_id='"+str(session['lid'])+"'"
+    ans = v.selectOne(qry)
+    print(qry)
+    if ans['password'] == current_password:
+        if confirm_password == new_password:
+            qry = "UPDATE login SET PASSWORD='"+new_password + \
+                "' where login_id='"+str(session['lid'])+"'"
+            res = v.update(qry)
+            return render_template('/admin/login.html')
+        else:
+            print('cpass and new pass not same')
+            return render_template('/doctor/doctor_change_password.html')
+
+    else:
+        print('Invalid')
+        return render_template('/doctor/doctor_change_password.html')
+
+# doctor-change_password-section ends--------------------------------------------------------------------------------------------------------------
+
 # -------------------------------------------------------------------------------------------------------------------------------#
-    #Doctor Ends#
+    # Doctor Ends#               /\/\/\/\/\/\/\\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\\/\/\/\/\/\/\/
 # -------------------------------------------------------------------------------------------------------------------------------#
 
 

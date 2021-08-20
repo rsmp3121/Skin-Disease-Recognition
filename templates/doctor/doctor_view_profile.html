@@ -7,8 +7,8 @@
 
   <body>
     <form
-      action=""
-      method="get"
+      action="/doctor_view_profile_post"
+      method="post"
       enctype="multipart/form-data"
       name="form1"
       id="form1"
@@ -122,12 +122,12 @@
           </td>
           <td colspan="2">
             <label for="fileField"></label>
-            <!-- <input
+            <input
               type="file"
               name="edit_doctor_image"
               id="fileField"
               value="{{val['image']}}"
-            /> -->
+            />
             <img
               src="{{val['image']}}"
               alt="image"
