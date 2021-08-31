@@ -1,74 +1,70 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>View Doctor Form</title>
-  </head>
-
+{% extends"admin/index.html" %}
+{%  block body %}
   <body>
     <form id="form1" name="form1" method="post" action="/adm_view_doctor_post">
-      <table width="1136" height="146" border="1">
+      <table class="table table-hover">
         <tr>
-          <td height="33" colspan="10">
+            <th colspan="3">Enter Your Search text</th>
+          <td height="33" colspan="5">
             <label for="textfield"></label>
             <div align="right">
-              <input
+              <input class="form-control"
                 name="doctor_search_name"
                 type="text"
                 id="textfield"
                 size="30"
-              />
-              <input type="submit" name="button" id="button" value="Search" />
-            </div>
+              />                 </div></td>
+<td colspan="2">
+              <input type="submit" class="btn btn-primary" name="button" id="button" value="Search" />
+
           </td>
         </tr>
         <tr>
-          <td width="40" height="44">
+          <th width="40" height="44">
             <div align="center">
               <em><strong>slno</strong></em>
             </div>
-          </td>
-          <td width="130">
+          </th>
+          <th width="130">
             <div align="center">
               <em><strong>Name</strong></em>
             </div>
-          </td>
-          <td width="134">
+          </th>
+          <th width="134">
             <div align="center">
               <em><strong>Gender</strong></em>
             </div>
-          </td>
-          <td width="141">
+          </th>
+          <th width="141">
             <div align="center">
               <em><strong>Qualification</strong></em>
             </div>
-          </td>
-          <td width="155">
+          </th>
+          <th width="155">
             <div align="center">
               <em><strong>Experience</strong></em>
             </div>
-          </td>
+          </th>
           <!-- <td width="153">
             <div align="center">
               <em><strong>Image</strong></em>
             </div>
           </td> -->
-          <td width="153">
+          <th width="153">
             <div align="center">
-              <em><strong>Address</strong></em>
-            </div>
-          </td>
+              <em><strong>Address</strong></em></div>
+          </th>
           <td width="138">
             <div align="center">
               <em><strong>Email</strong></em>
             </div>
           </td>
-          <td width="132">
+          <th width="132">
             <div align="center">
               <em><strong>Contact</strong></em>
             </div>
-          </td>
-          <td width="55">&nbsp;</td>
+          </th>
+          <th width="55">&nbsp;</th>
         </tr>
         {%for i in val%}
         <tr align="center">
@@ -89,7 +85,7 @@
             <p align="center">
               <em
                 ><strong
-                  ><a href="/adm_edit_doctor/{{i['doctor_id']}}"
+                  ><a href="/adm_edit_doctor/{{i['doctor_id']}}" class="btn btn-primary"
                     >Edit</a
                   ></strong
                 ></em
@@ -98,7 +94,7 @@
             <p align="center">
               <em
                 ><strong
-                  ><a href="/adm_delete_doctor/{{ i['doctor_id'] }}"
+                  ><a href="/adm_delete_doctor/{{ i['doctor_id'] }}" class="btn btn-danger"
                     >Delete</a
                   ></strong
                 ></em
@@ -110,4 +106,4 @@
       </table>
     </form>
   </body>
-</html>
+{% endblock %}

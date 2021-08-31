@@ -1,43 +1,40 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>View Disease Form</title>
-  </head>
+{% extends"admin/index.html" %}
+{%  block body %}
   <body>
     <form id="form1" name="form1" method="post" action="/adm_view_disease_post">
-      <table width="700" height="143" border="1">
+      <table class="table table-hover">
         <tr>
           <td height="34" colspan="5">
             <label for="textfield"></label>
             <div align="right">
-              <input name="disease_search_name" type="text" id="textfield" />
-              <input type="submit" name="button" id="button" value="Search" />
+              <input name="disease_search_name" class="form-control" type="text" id="textfield" />
+              <input type="submit" name="button" id="button" value="Search" class="btn btn-primary"/>
             </div>
           </td>
         </tr>
         <tr>
-          <td width="38" height="40">
+          <th width="38" height="40">
             <div align="center">
               <em><strong>slno</strong></em>
             </div>
-          </td>
-          <td width="149">
+          </th>
+          <th width="149">
             <div align="center">
               <em><strong>Name</strong></em>
+
             </div>
-          </td>
+          </th>
           <!-- <td width="200">
             <div align="center">
               <em><strong>Image</strong></em>
             </div>
           </td> -->
-          <td width="200">
+          <th width="200">
             <div align="center">
               <em><strong>Description</strong></em>
             </div>
-          </td>
-          <td width="50">&nbsp;</td>
+          </th>
+          <th width="50">&nbsp;</th>
         </tr>
         {%for i in val%}
         <tr align="center">
@@ -53,7 +50,7 @@
               <em
                 ><strong
                   ><a href="/adm_edit_disease/{{i['disease_id']}}"
-                    >Edit</a
+                   class="btn btn-primary" >Edit</a
                   ></strong
                 ></em
               >
@@ -62,7 +59,7 @@
               <em
                 ><strong
                   ><a href="/adm_delete_disease/{{ i['disease_id'] }}"
-                    >Delete</a
+                    class="btn btn-danger">Delete</a
                   >
                 </strong></em
               >
@@ -73,4 +70,4 @@
       </table>
     </form>
   </body>
-</html>
+{% endblock %}

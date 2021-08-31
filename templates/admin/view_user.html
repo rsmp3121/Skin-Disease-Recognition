@@ -1,56 +1,55 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>View User Form</title>
-  </head>
-
+{% extends"admin/index.html" %}
+{%  block body %}
   <body>
     <form id="form1" name="form1" method="post" action="/adm_view_user_post">
-      <table width="850" height="163" border="1">
+      <table class="table table-hover">
         <tr>
-          <td height="34" colspan="6">
+          <td height="34" colspan="5">
             <label for="textfield"></label>
             <div align="right">
-              <input type="text" name="user_search_name" id="textfield" />
-              <input type="submit" name="button" id="button" value="Search" />
+              <input type="text" name="user_search_name" id="textfield" class="form-control" />
+
             </div>
           </td>
+            <td
+                >
+                 <input type="submit" name="button" id="button" value="Search" class="btn btn-primary" />
+            </td>
         </tr>
         <tr>
-          <td width="39" height="61">
+          <th width="39" height="61">
             <div align="center">
               <em><strong>slno</strong></em>
             </div>
-          </td>
-          <td width="132">
+          </th>
+          <th width="132">
             <div align="center">
               <em><strong>Name</strong></em>
             </div>
-          </td>
-          <td width="146">
+          </th>
+          <th width="146">
             <p align="center">
               <em><strong>Gender </strong></em>
             </p>
             <p align="center">
               <em><strong>Date_of_Birth</strong></em>
             </p>
-          </td>
-          <td width="148">
+          </th>
+          <th width="148">
             <div align="center">
               <em><strong>Address</strong></em>
             </div>
-          </td>
-          <td width="152">
+          </th>
+          <th width="152">
             <div align="center">
               <em><strong>Email</strong></em>
             </div>
-          </td>
-          <td width="154">
+          </th>
+          <th width="154">
             <div align="center">
               <em><strong>Contact</strong></em>
             </div>
-          </td>
+          </th>
         </tr>
         {%for i in val%}
         <tr align="center">
@@ -68,4 +67,4 @@
       </table>
     </form>
   </body>
-</html>
+{% endblock %}

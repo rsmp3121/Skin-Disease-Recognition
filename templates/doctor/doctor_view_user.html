@@ -7,9 +7,9 @@
 
   <body>
     <form id="form1" name="form1" method="post" action="/doctor_view_user_post">
-      <table width="850" height="163" border="1">
+      <table width="890" height="163" border="1">
         <tr>
-          <td height="34" colspan="6">
+          <td height="34" colspan="7">
             <label for="textfield"></label>
             <div align="right">
               <input type="text" name="user_search_name" id="textfield" />
@@ -51,6 +51,11 @@
               <em><strong>Contact</strong></em>
             </div>
           </td>
+          <td width="154">
+            <div align="center">
+              <em><strong>Chat</strong></em>
+            </div>
+          </td>
         </tr>
         {%for i in val%}
         <tr align="center">
@@ -63,6 +68,9 @@
           <td>{{i['place']}},{{i['post']}},{{i['pin']}}</td>
           <td>{{i['email']}}</td>
           <td>{{i['contact']}}</td>
+          <td>
+            <a href="/doctor_chat/{{i['login_id']}}/{{ i['name']}}">Chat Now</a>
+          </td>
         </tr>
         {%endfor%}
       </table>

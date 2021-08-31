@@ -1,34 +1,29 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>View Feedback Form</title>
-  </head>
-
+{% extends"admin/index.html" %}
+{%  block body %}
   <body>
     <form id="form1" name="form1" method="post" action="">
-      <table width="500" height="90" border="1">
+      <table class="table table-hover">
         <tr>
-          <td width="35" height="37">
+          <th width="35" height="37">
             <div align="center">
-              <em><strong>slno</strong></em>
+            slno
             </div>
-          </td>
-          <td width="155">
+          </th>
+          <th width="155">
             <div align="center">
               <em><strong>Feedback</strong></em>
             </div>
-          </td>
-          <td width="67">
+          </th>
+          <th width="67">
             <div align="center">
               <em><strong>Date</strong></em>
             </div>
-          </td>
-          <td width="120">
+          </th>
+          <th width="120">
             <div align="center">
               <em><strong>UserInfo</strong></em>
             </div>
-          </td>
+          </th>
         </tr>
         {%for i in val%}
         <tr align="center">
@@ -44,4 +39,4 @@
       </table>
     </form>
   </body>
-</html>
+{% endblock %}

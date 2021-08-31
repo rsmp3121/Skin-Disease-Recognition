@@ -1,0 +1,160 @@
+<form id="form1" name="form1">
+  <center>
+    <h4><i>CHAT WITH TEAM LEADER</i></h4>
+  </center>
+  <br />
+  <script src="/static/jquery.min.js"></script>
+  <div class="col-md-12">
+    <input type="hidden" id="hid" name="hid" value="{{ session["toid"] }}" />
+    <input type="hidden" id="hh" value="{{ session["name"] }}" />
+    <table width="600" align="center" class="table-bordered">
+      <tr>
+        <th width="92">Message</th>
+        <td width="459">
+          <textarea
+            name="ta"
+            class="form-control"
+            id="textarea"
+            cols="45"
+            required
+          ></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td align="center" colspan="2">
+          <input
+            type="submit"
+            class="btn btn-success"
+            name="SEnd"
+            id="SEnd"
+            value="SEND"
+          />
+        </td>
+      </tr>
+    </table>
+    <p>&nbsp;</p>
+    <br />
+
+    <table id="tbl_msg" width="600" align="center"></table>
+  </div>
+  <script>
+    $(document).ready(function () {
+      var id, toid, name;
+      toid = document.getElementById("hid").value;
+      name = document.getElementById("hh").value;
+      var ajax_call = function () {
+        $.ajax({
+          url: "/emp_chat_chk",
+          type: "post",
+          data: { toid: toid },
+          success: function (response) {
+            console.log(response);
+            $("#tbl_msg").empty();
+            var ln = response.length;
+            for (i = 0; i < ln; i++) {
+              var id = response[i]["from_id"];
+              var date = response[i]["date_and_time"];
+              var message = response[i]["message"];
+              if (toid != id) {
+                // outgoing message
+                $("#tbl_msg").append(
+                  "<tr><td class='pull-left' style='width: 50%;'></td><td class='pull-right' style='width: 50%;background-color: #78CF8A;border-radius: 10px;'><div class='row'><div class='col-md-6'>ME</div><div class='col-md-6' align='right'>" +
+                    date +
+                    "</div><div class='col-md-12'><h4>" +
+                    message +
+                    "</h4></div></div></td></tr>"
+                );
+              }
+              if (toid == id) {
+                // incoming message
+                $("#tbl_msg").append(
+                  "<tr><td class='pull-left' style='width: 50%;background-color: #c3e6cb;border-radius: 10px;'><div class='row'><div class='col-md-6'>" +
+                    name +
+                    "</div><div class='col-md-6' align='right'>" +
+                    date +
+                    "</div><div class='col-md-12'><h4>" +
+                    message +
+                    "</h4></div></div></td><td class='pull-right' style='width: 50%;'></td></tr>"
+                );
+              }
+            }
+          },
+          error: function (error) {
+            console.log(error);
+            //  alert("error   :   ", error.message);
+          },
+        });
+      };
+      $("#SEnd").click(function () {
+        var msg = document.getElementById("textarea").value;
+
+        $.ajax({
+          url: "/emp_chat_p/" + msg,
+          type: "GET",
+          data: {},
+          contentType: "application/json;charset=utf-8",
+          dataType: "json",
+          success: function (dat) {
+            // {#                alert('success');#}
+            $("#textfield").val("");
+          },
+          error: function (ts) {
+            // alert(ts);
+          },
+        });
+        test();
+      });
+
+      function test() {
+        toid = document.getElementById("hid").value;
+        name = document.getElementById("hh").value;
+        var ajax_call = function () {
+          $.ajax({
+            url: "/emp_chat_chk",
+            type: "post",
+            data: { toid: toid },
+            success: function (response) {
+              console.log(response);
+              $("#tbl_msg").empty();
+              var ln = response.length;
+              for (i = 0; i < ln; i++) {
+                var id = response[i]["from_id"];
+                var date = response[i]["date_and_time"];
+                var message = response[i]["message"];
+                if (toid != id) {
+                  // outgoing message
+                  $("#tbl_msg").append(
+                    "<tr><td class='pull-left' style='width: 50%;'></td><td class='pull-right' style='width: 50%;background-color: #78CF8A;border-radius: 10px;'><div class='row'><div class='col-md-6'>ME</div><div class='col-md-6' align='right'>" +
+                      date +
+                      "</div><div class='col-md-12'><h4>" +
+                      message +
+                      "</h4></div></div></td></tr>"
+                  );
+                }
+                if (toid == id) {
+                  // incoming message
+                  $("#tbl_msg").append(
+                    "<tr><td class='pull-left' style='width: 50%;background-color: #c3e6cb;border-radius: 10px;'><div class='row'><div class='col-md-6'>" +
+                      name +
+                      "</div><div class='col-md-6' align='right'>" +
+                      date +
+                      "</div><div class='col-md-12'><h4>" +
+                      message +
+                      "</h4></div></div></td><td class='pull-right' style='width: 50%;'></td></tr>"
+                  );
+                }
+              }
+            },
+            error: function (error) {
+              console.log(error);
+              //   alert("error   :   ", error.message);
+            },
+          });
+        };
+      }
+
+      var interval = 1000; // 1sec
+      setInterval(ajax_call, interval);
+    });
+  </script>
+</form>

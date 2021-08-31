@@ -1,65 +1,81 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Add Disease Form</title>
-  </head>
+{% extends"admin/index.html" %} {% block body %}
+<body>
+  <form
+    action="/adm_add_disease_post"
+    method="post"
+    enctype="multipart/form-data"
+    name="form1"
+    id="form1"
+  >
+    <table class="table table-hover">
+      <tr>
+        <th width="85">Name</th>
+        <td width="378">
+          <label for="textfield"></label>
+          <input
+            class="form-control"
+            name="add_disease_name"
+            type="text"
+            id="textfield"
+            size="60"
+          />
+        </td>
+      </tr>
+      <tr>
+        <th>Image</th>
+        <td>
+          <!-- <label for="fileField"></label> -->
+          <!-- <input
+            type="file"
+            name="add_disease_image"
+            class="form-control"
+            id="fileField"
+          /> -->
 
-  <body>
-    <form
-      action="/adm_add_disease_post"
-      method="post"
-      enctype="multipart/form-data"
-      name="form1"
-      id="form1"
-    >
-      <table width="479" height="168" border="1">
-        <tr>
-          <td width="85">
-            <em><strong>Name</strong></em>
-          </td>
-          <td width="378">
-            <label for="textfield"></label>
-            <input
-              name="add_disease_name"
-              type="text"
-              id="textfield"
-              size="60"
-            />
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <em><strong>Image</strong></em>
-          </td>
-          <td>
-            <label for="fileField"></label>
-            <input type="file" name="add_disease_image" id="fileField" />
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <em><strong>Description</strong></em>
-          </td>
-          <td>
-            <label for="textarea"></label>
-            <label for="textarea"></label>
-            <textarea
-              name="add_disease_description"
-              id="textarea"
-              cols="60"
-              rows="5"
-            ></textarea>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">
-            <div align="center">
-              <input type="submit" name="button" id="button" value="ADD" />
+          <div class="input-group">
+            <div class="custom-file">
+              <input
+                type="file"
+                name="add_disease_image"
+                class="custom-file-input"
+                id="inputGroupFile01"
+                aria-describedby="inputGroupFileAddon01"
+              />
+              <label class="custom-file-label" for="inputGroupFile01"
+                >Choose file</label
+              >
             </div>
-          </td>
-        </tr>
-      </table>
-    </form>
-  </body>
-</html>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th>Description</th>
+        <td>
+          <label for="textarea"></label>
+          <label for="textarea"></label>
+          <textarea
+            class="form-control"
+            name="add_disease_description"
+            id="textarea"
+            cols="60"
+            rows="5"
+          ></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <div align="center">
+            <input
+              type="submit"
+              class="btn btn-primary"
+              name="button"
+              id="button"
+              value="ADD"
+            />
+          </div>
+        </td>
+      </tr>
+    </table>
+  </form>
+</body>
+{% endblock %}
