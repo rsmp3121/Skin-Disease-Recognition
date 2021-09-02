@@ -1,47 +1,66 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Schedule Mangement(doctor)</title>
-  </head>
+{% extends"doctor/home.html" %} {% block body %}
 
-  <body>
-    <form
-      id="form1"
-      name="form1"
-      method="post"
-      action="/doctor_schedule_management_post"
-    >
-      <table width="420" height="133" border="1">
-        <tr>
-          <td width="122">From Time</td>
-          <td width="251">
-            <label for="textfield2"></label>
-            <input name="from_time" type="time" id="textfield2" size="35" />
-          </td>
-        </tr>
-        <tr>
-          <td>To Time</td>
-          <td>
-            <label for="textfield3"></label>
-            <input name="to_time" type="time" id="textfield3" size="35" />
-          </td>
-        </tr>
-        <tr>
-          <td>Date</td>
-          <td>
-            <label for="textfield4"></label>
-            <input name="date" type="date" id="textfield4" size="35" />
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">
-            <div align="center">
-              <input type="submit" name="button" id="button" value="Schedule" />
-            </div>
-          </td>
-        </tr>
-      </table>
-    </form>
-  </body>
-</html>
+<body>
+  <form
+    id="form1"
+    name="form1"
+    method="post"
+    action="/doctor_schedule_management_post"
+  >
+    <table class="table table-hover">
+      <tr>
+        <td width="122">From Time</td>
+        <td width="251">
+          <label for="textfield2"></label>
+          <input
+            name="from_time"
+            class="form-control"
+            type="time"
+            id="textfield2"
+            size="35"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>To Time</td>
+        <td>
+          <label for="textfield3"></label>
+          <input
+            name="to_time"
+            class="form-control"
+            type="time"
+            id="textfield3"
+            size="35"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>Date</td>
+        <td>
+          <label for="textfield4"></label>
+          <input
+            name="date"
+            class="form-control"
+            type="date"
+            id="textfield4"
+            size="35"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <div align="center">
+            <input
+              type="submit"
+              name="button"
+              class="btn btn-primary"
+              id="button"
+              value="Schedule"
+            />
+          </div>
+        </td>
+      </tr>
+    </table>
+  </form>
+</body>
+{% endblock %}

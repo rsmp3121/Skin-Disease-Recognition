@@ -1,83 +1,90 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>View Disease Form(Doctor)</title>
-  </head>
-  <body>
-    <form
-      id="form1"
-      name="form1"
-      method="post"
-      action="/doctor_view_disease_post"
-    >
-      <table width="700" height="143" border="1">
-        <tr>
-          <td height="34" colspan="5">
-            <label for="textfield"></label>
-            <div align="right">
-              <input name="disease_search_name" type="text" id="textfield" />
-              <input type="submit" name="button" id="button" value="Search" />
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td width="38" height="40">
-            <div align="center">
-              <em><strong>slno</strong></em>
-            </div>
-          </td>
-          <td width="149">
-            <div align="center">
-              <em><strong>Name</strong></em>
-            </div>
-          </td>
-          <!-- <td width="200">
+{% extends"doctor/home.html" %} {% block body %}
+<body>
+  <form
+    id="form1"
+    name="form1"
+    method="post"
+    action="/doctor_view_disease_post"
+  >
+    <table class="table table-hover">
+      <tr>
+        <td height="34" colspan="5">
+          <label for="textfield"></label>
+          <div align="center">
+            <input
+              name="disease_search_name"
+              type="text"
+              id="textfield"
+              class="form-control"
+              placeholder="Enter Your Search Text"
+            />
+            <input
+              type="submit"
+              name="button"
+              id="button"
+              class="disease_search_name btn btn-primary"
+              value="Search"
+            />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td width="38" height="40">
+          <div align="center">
+            <em><strong>slno</strong></em>
+          </div>
+        </td>
+        <td width="149">
+          <div align="center">
+            <em><strong>Name</strong></em>
+          </div>
+        </td>
+        <!-- <td width="200">
             <div align="center">
               <em><strong>Image</strong></em>
             </div>
           </td> -->
-          <td width="200">
-            <div align="center">
-              <em><strong>Description</strong></em>
-            </div>
-          </td>
-          <td width="50">&nbsp;</td>
-        </tr>
-        {%for i in val%}
-        <tr align="center">
-          <td>{{loop.index}}</td>
-          <td>
-            {{i['name']}}<br />
-            <img src="{{i['image']}}" alt="Image" height="100" width="100" />
-          </td>
+        <td width="200">
+          <div align="center">
+            <em><strong>Description</strong></em>
+          </div>
+        </td>
+        <td width="50">&nbsp;</td>
+      </tr>
+      {%for i in val%}
+      <tr align="center" class="text-styling">
+        <td>{{loop.index}}</td>
+        <td>
+          {{i['name']}}<br />
+          <img src="{{i['image']}}" alt="Image" height="100" width="100" />
+        </td>
 
-          <td>{{i['descriptions']}}</td>
-          <td>
-            <p align="center">
-              <em
-                ><strong>
-                  <!-- <a href="/adm_edit_disease/{{i['disease_id']}}"
+        <td>{{i['descriptions']}}</td>
+        <td>
+          <p align="center">
+            <em
+              ><strong>
+                <!-- <a href="/adm_edit_disease/{{i['disease_id']}}"
                     >Edit</a
                   > -->
-                  <a href="#">Edit</a>
-                </strong></em
-              >
-            </p>
-            <p align="center">
-              <em
-                ><strong>
-                  <!-- <a href="/adm_delete_disease/{{ i['disease_id'] }}"
+                <a href="#" class="btn btn-primary">Edit</a>
+              </strong></em
+            >
+          </p>
+          <p align="center">
+            <em
+              ><strong>
+                <!-- <a href="/adm_delete_disease/{{ i['disease_id'] }}"
                     >Delete</a
                   > -->
-                  <a href="#">Delete</a>
-                </strong></em
-              >
-            </p>
-          </td>
-        </tr>
-        {%endfor%}
-      </table>
-    </form>
-  </body>
-</html>
+                <a href="#" class="btn btn-danger">Delete</a>
+              </strong></em
+            >
+          </p>
+        </td>
+      </tr>
+      {%endfor%}
+    </table>
+  </form>
+</body>
+{% endblock %}

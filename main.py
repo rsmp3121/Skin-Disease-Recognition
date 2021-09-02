@@ -302,7 +302,7 @@ def adm_admin():
 
 @app.route("/adm_login")
 def adm_login():
-    return render_template('/admin/login.html')
+    return render_template('/login-page.html')
 
 
 @app.route("/adm_login_post", methods=['post'])
@@ -734,7 +734,7 @@ def emp_chat_p(msg):
 
 
 @app.route('/')
-def home():
+def login_page():
     return render_template("login-page.html")
 
 
@@ -742,13 +742,18 @@ def home():
 def admin_dashboard():
     return render_template('/admin/index.html')
 
+
+@app.route('/doctor_dashboard')
+def doctor_dashboard():
+    return render_template('/doctor/home.html')
+
+
 # ---------login-temp-anim-codepen
 
 
 # @app.route('/anim_log')
 # def anim_log():
 #     return render_template('login-anim.html')
-
 
 if __name__ == "__main__":
     app.run(port=8000, debug=True)

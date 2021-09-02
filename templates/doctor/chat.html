@@ -1,3 +1,4 @@
+{% extends"doctor/home.html" %} {% block body %}
 <form id="form1" name="form1">
   <center>
     <h4><i>CHAT WITH TEAM LEADER</i></h4>
@@ -5,9 +6,10 @@
   <br />
   <script src="/static/jquery.min.js"></script>
   <div class="col-md-12">
-    <input type="hidden" id="hid" name="hid" value="{{ session["toid"] }}" />
-    <input type="hidden" id="hh" value="{{ session["name"] }}" />
-    <table width="600" align="center" class="table-bordered">
+    <input type="hidden" id="hid" name="hid" value="{{ session["toid"] }}"
+    class="form-control"/> <input type="hidden" id="hh" value="{{
+    session["name"] }}" />
+    <table class="table table-hover">
       <tr>
         <th width="92">Message</th>
         <td width="459">
@@ -158,3 +160,4 @@
     });
   </script>
 </form>
+{% endblock %}

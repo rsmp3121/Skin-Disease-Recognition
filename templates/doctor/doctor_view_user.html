@@ -1,79 +1,90 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>View User Form</title>
-  </head>
-
-  <body>
-    <form id="form1" name="form1" method="post" action="/doctor_view_user_post">
-      <table width="890" height="163" border="1">
-        <tr>
-          <td height="34" colspan="7">
-            <label for="textfield"></label>
-            <div align="right">
-              <input type="text" name="user_search_name" id="textfield" />
-              <input type="submit" name="button" id="button" value="Search" />
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td width="39" height="61">
-            <div align="center">
-              <em><strong>slno</strong></em>
-            </div>
-          </td>
-          <td width="132">
-            <div align="center">
-              <em><strong>Name</strong></em>
-            </div>
-          </td>
-          <td width="146">
-            <p align="center">
-              <em><strong>Gender </strong></em>
-            </p>
-            <p align="center">
-              <em><strong>Date_of_Birth</strong></em>
-            </p>
-          </td>
-          <td width="148">
-            <div align="center">
-              <em><strong>Address</strong></em>
-            </div>
-          </td>
-          <td width="152">
-            <div align="center">
-              <em><strong>Email</strong></em>
-            </div>
-          </td>
-          <td width="154">
-            <div align="center">
-              <em><strong>Contact</strong></em>
-            </div>
-          </td>
-          <td width="154">
-            <div align="center">
-              <em><strong>Chat</strong></em>
-            </div>
-          </td>
-        </tr>
-        {%for i in val%}
-        <tr align="center">
-          <td height="58">{{loop.index}}</td>
-          <td>{{i['name']}}</td>
-          <td>
-            {{i['gender']}}<br />
-            {{i['date_of_birth']}}
-          </td>
-          <td>{{i['place']}},{{i['post']}},{{i['pin']}}</td>
-          <td>{{i['email']}}</td>
-          <td>{{i['contact']}}</td>
-          <td>
-            <a href="/doctor_chat/{{i['login_id']}}/{{ i['name']}}">Chat Now</a>
-          </td>
-        </tr>
-        {%endfor%}
-      </table>
-    </form>
-  </body>
-</html>
+{% extends"doctor/home.html" %} {% block body %}
+<body>
+  <form id="form1" name="form1" method="post" action="/doctor_view_user_post">
+    <table class="table table-hover">
+      <tr>
+        <td height="34" colspan="7">
+          <label for="textfield"></label>
+          <div align="center">
+            <input
+              type="text"
+              name="user_search_name"
+              class="form-control"
+              id="textfield"
+              placeholder="Enter Your Search Text"
+            />
+            <br />
+            <input
+              type="submit"
+              name="button"
+              id="button"
+              class="btn btn-primary"
+              value="Search"
+            />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td width="39" height="61">
+          <div align="center">
+            <em><strong>slno</strong></em>
+          </div>
+        </td>
+        <td width="132">
+          <div align="center">
+            <em><strong>Name</strong></em>
+          </div>
+        </td>
+        <td width="146">
+          <p align="center">
+            <em><strong>Gender </strong></em>
+          </p>
+          <p align="center">
+            <em><strong>Date_of_Birth</strong></em>
+          </p>
+        </td>
+        <td width="148">
+          <div align="center">
+            <em><strong>Address</strong></em>
+          </div>
+        </td>
+        <td width="152">
+          <div align="center">
+            <em><strong>Email</strong></em>
+          </div>
+        </td>
+        <td width="154">
+          <div align="center">
+            <em><strong>Contact</strong></em>
+          </div>
+        </td>
+        <td width="154">
+          <div align="center">
+            <em><strong>Chat</strong></em>
+          </div>
+        </td>
+      </tr>
+      {%for i in val%}
+      <tr align="center">
+        <td height="58">{{loop.index}}</td>
+        <td>{{i['name']}}</td>
+        <td>
+          {{i['gender']}}<br />
+          {{i['date_of_birth']}}
+        </td>
+        <td>{{i['place']}},{{i['post']}},{{i['pin']}}</td>
+        <td>{{i['email']}}</td>
+        <td>{{i['contact']}}</td>
+        <td>
+          <a
+            href="/doctor_chat/{{i['login_id']}}/{{ i['name']}}"
+            class="btn btn-danger"
+            >Chat Now</a
+          >
+        </td>
+      </tr>
+      {%endfor%}
+    </table>
+  </form>
+</body>
+{% endblock %}
