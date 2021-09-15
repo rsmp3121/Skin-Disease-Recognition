@@ -1,40 +1,41 @@
 {% extends"admin/index.html" %} {% block body %}
-<body>
-  <form
-    action="/adm_edit_disease_post"
-    method="post"
-    enctype="multipart/form-data"
-    name="form1"
-    id="form1"
-  >
-    <table class="table table-hover">
-      <tr>
-        <th width="85">Name</th>
-        <td width="378">
-          <label for="textfield"></label>
-          <input
-            class="form-control"
-            name="edit_disease_name"
-            type="text"
-            id="textfield"
-            size="60"
-            value="{{val['name']}}"
-          />
-        </td>
-      </tr>
-      <tr>
-        <th>Image</th>
-        <td>
-          <label for="fileField"></label>
-          <input
-            type="file"
-            name="edit_disease_image"
-            class="form-control"
-            id="fileField"
-            value="{{val['image']}}"
-          />
 
-          <!-- <div class="input-group">
+<form
+  action="/adm_edit_disease_post"
+  method="post"
+  enctype="multipart/form-data"
+  name="form1"
+  id="form1"
+>
+  <table class="table table-hover">
+    <tr>
+      <th width="85">Name</th>
+      <td width="378">
+        <label for="textfield"></label>
+        <input
+          class="form-control"
+          name="edit_disease_name"
+          type="text"
+          id="textfield"
+          size="60"
+          required
+          value="{{val['name']}}"
+        />
+      </td>
+    </tr>
+    <tr>
+      <th>Image</th>
+      <td>
+        <label for="fileField"></label>
+        <input
+          type="file"
+          name="edit_disease_image"
+          class="form-control"
+          id="fileField"
+          value="{{val['image']}}"
+        />
+
+        <!-- <div class="input-group">
             <div class="custom-file">
               <input
                 type="file"
@@ -49,38 +50,39 @@
               >
             </div>
           </div> -->
-        </td>
-      </tr>
-      <tr>
-        <th>Description</th>
-        <td>
-          <label for="textarea"></label>
-          <label for="textarea"></label>
-          <textarea
-            class="form-control"
-            name="edit_disease_description"
-            id="textarea"
-            cols="60"
-            rows="5"
-          >
+      </td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td>
+        <label for="textarea"></label>
+        <label for="textarea"></label>
+        <textarea
+          class="form-control"
+          name="edit_disease_description"
+          id="textarea"
+          cols="60"
+          required
+          rows="5"
+        >
 {{val['descriptions']}}</textarea
-          >
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2">
-          <div align="center">
-            <input
-              type="submit"
-              class="btn btn-primary"
-              name="button"
-              id="button"
-              value="UPDATE"
-            />
-          </div>
-        </td>
-      </tr>
-    </table>
-  </form>
-</body>
+        >
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div align="center">
+          <input
+            type="submit"
+            class="btn btn-primary"
+            name="button"
+            id="button"
+            value="UPDATE"
+          />
+        </div>
+      </td>
+    </tr>
+  </table>
+</form>
+
 {% endblock %}

@@ -1,81 +1,84 @@
 {% extends"admin/index.html" %} {% block body %}
-<body>
-  <form
-    action="/adm_add_disease_post"
-    method="post"
-    enctype="multipart/form-data"
-    name="form1"
-    id="form1"
-  >
-    <table class="table table-hover">
-      <tr>
-        <th width="85">Name</th>
-        <td width="378">
-          <label for="textfield"></label>
-          <input
-            class="form-control"
-            name="add_disease_name"
-            type="text"
-            id="textfield"
-            size="60"
-          />
-        </td>
-      </tr>
-      <tr>
-        <th>Image</th>
-        <td>
-          <!-- <label for="fileField"></label> -->
-          <!-- <input
+
+<form
+  action="/adm_add_disease_post"
+  method="post"
+  enctype="multipart/form-data"
+  name="form1"
+  id="form1"
+>
+  <table class="table table-hover">
+    <tr>
+      <th width="85">Name</th>
+      <td width="378">
+        <label for="textfield"></label>
+        <input
+          class="form-control"
+          name="add_disease_name"
+          type="text"
+          required
+          id="textfield"
+          size="60"
+        />
+      </td>
+    </tr>
+    <tr>
+      <th>Image</th>
+      <td>
+        <!-- <label for="fileField"></label> -->
+        <!-- <input
             type="file"
             name="add_disease_image"
             class="form-control"
             id="fileField"
           /> -->
 
-          <div class="input-group">
-            <div class="custom-file">
-              <input
-                type="file"
-                name="add_disease_image"
-                class="custom-file-input"
-                id="inputGroupFile01"
-                aria-describedby="inputGroupFileAddon01"
-              />
-              <label class="custom-file-label" for="inputGroupFile01"
-                >Choose file</label
-              >
-            </div>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <th>Description</th>
-        <td>
-          <label for="textarea"></label>
-          <label for="textarea"></label>
-          <textarea
-            class="form-control"
-            name="add_disease_description"
-            id="textarea"
-            cols="60"
-            rows="5"
-          ></textarea>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2">
-          <div align="center">
+        <div class="input-group">
+          <div class="custom-file">
             <input
-              type="submit"
-              class="btn btn-primary"
-              name="button"
-              id="button"
-              value="ADD"
+              type="file"
+              name="add_disease_image"
+              class="custom-file-input"
+              id="inputGroupFile01"
+              required
+              aria-describedby="inputGroupFileAddon01"
             />
+            <label class="custom-file-label" for="inputGroupFile01"
+              >Choose file</label
+            >
           </div>
-        </td>
-      </tr>
-    </table>
-  </form>
-</body>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td>
+        <label for="textarea"></label>
+        <label for="textarea"></label>
+        <textarea
+          class="form-control"
+          name="add_disease_description"
+          id="textarea"
+          cols="60"
+          required
+          rows="5"
+        ></textarea>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div align="center">
+          <input
+            type="submit"
+            class="btn btn-primary"
+            name="button"
+            id="button"
+            value="ADD"
+          />
+        </div>
+      </td>
+    </tr>
+  </table>
+</form>
+
 {% endblock %}

@@ -1,171 +1,200 @@
 {% extends"admin/index.html" %} {% block body %}
-<body>
-  <form
-    action="/adm_add_doctor_post"
-    method="post"
-    enctype="multipart/form-data"
-    name="form1"
-    id="form1"
-  >
-    <table class="table table-hover">
-      <tr>
-        <th width="97">Name</th>
-        <td colspan="2">
-          <label for="textfield6"></label>
-          <input
-            name="add_doctor_name"
-            type="text"
-            class="form-control"
-            id="textfield6"
-            size="50"
-          />
-        </td>
-      </tr>
-      <tr>
-        <th>Gender</th>
-        <td width="140">
-          <input type="radio" name="add_doctor_radio" id="radio" value="m" />
-          <label for="radio"
-            ><strong><em>Male</em></strong></label
-          >
-        </td>
-        <th width="154">
-          <input type="radio" name="add_doctor_radio" id="radio" value="f" />
-          <em
-            ><strong>
-              <label for="radio">Female</label>
-            </strong></em
+
+<form
+  action="/adm_add_doctor_post"
+  method="post"
+  enctype="multipart/form-data"
+  name="form1"
+  id="form1"
+>
+  <table class="table table-hover">
+    <tr>
+      <th width="97">Name</th>
+      <td colspan="2">
+        <label for="textfield6"></label>
+        <input
+          name="add_doctor_name"
+          type="text"
+          class="form-control"
+          id="textfield6"
+          required
+          size="50"
+        />
+      </td>
+    </tr>
+    <tr>
+      <th>Gender</th>
+      <td width="140">
+        <input
+          type="radio"
+          name="add_doctor_radio"
+          id="radio"
+          value="m"
+          required
+          checked="checked"
+        />
+        <label for="radio"
+          ><strong><em>Male</em></strong></label
+        >
+      </td>
+      <th width="154">
+        <input
+          type="radio"
+          name="add_doctor_radio"
+          id="radio"
+          value="f"
+          required
+        />
+        <em
           ><strong>
-            <label for="radio2"></label>
-          </strong>
-        </th>
-      </tr>
-      <tr>
-        <th>Qualification</th>
-        <td colspan="2">
-          <label for="textfield12"></label>
-          <input
-            class="form-control"
-            name="add_doctor_qualification"
-            type="text"
-            id="textfield12"
-            size="50"
-          />
-        </td>
-      </tr>
-      <tr>
-        <th>Experience</th>
-        <td colspan="2">
-          <label for="textfield13"></label>
-          <input
-            name="add_doctor_experience"
-            type="text"
-            class="form-control"
-            id="textfield13"
-            size="50"
-          />
-        </td>
-      </tr>
-      <tr>
-        <th>Image</th>
-        <td colspan="2">
-          <!-- <label for="fileField"></label>
-            <input type="file" name="add_doctor_image"   class="form-control" id="fileField" /> -->
-          <div class="input-group">
-            <div class="custom-file">
-              <input
-                type="file"
-                name="add_disease_image"
-                class="custom-file-input"
-                id="inputGroupFile01"
-                aria-describedby="inputGroupFileAddon01"
-              />
-              <label class="custom-file-label" for="inputGroupFile01"
-                >Choose file</label
-              >
-            </div>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <th>Place</th>
-        <td colspan="2">
-          <label for="textfield14"></label>
-          <input
-            name="add_doctor_place"
-            class="form-control"
-            type="text"
-            id="textfield14"
-            size="50"
-          />
-        </td>
-      </tr>
-      <tr>
-        <th>Post</th>
-        <td colspan="2">
-          <label for="textfield16"></label>
-          <input
-            name="add_doctor_post"
-            type="text"
-            class="form-control"
-            id="textfield16"
-            size="50"
-          />
-        </td>
-      </tr>
-      <tr>
-        <th>PIN</th>
-        <td colspan="2">
-          <label for="textfield17"></label>
-          <input
-            name="add_doctor_pin"
-            type="text"
-            id="textfield17"
-            class="form-control"
-            size="50"
-          />
-        </td>
-      </tr>
-      <tr>
-        <th>Email</th>
-        <td colspan="2">
-          <label for="textfield18"></label>
-          <input
-            name="add_doctor_email"
-            type="text"
-            id="textfield18"
-            class="form-control"
-            size="50"
-          />
-        </td>
-      </tr>
-      <tr>
-        <th>Contact</th>
-        <td colspan="2">
-          <label for="textfield19"></label>
-          <input
-            name="add_doctor_contact"
-            type="text"
-            class="form-control"
-            id="textfield19"
-            size="50"
-          />
-        </td>
-      </tr>
-      <tr>
-        <td colspan="3">
-          <div align="center">
+            <label for="radio">Female</label>
+          </strong></em
+        ><strong>
+          <label for="radio2"></label>
+        </strong>
+      </th>
+    </tr>
+    <tr>
+      <th>Qualification</th>
+      <td colspan="2">
+        <label for="textfield12"></label>
+        <input
+          class="form-control"
+          name="add_doctor_qualification"
+          type="text"
+          required
+          id="textfield12"
+          size="50"
+        />
+      </td>
+    </tr>
+    <tr>
+      <th>Experience</th>
+      <td colspan="2">
+        <label for="textfield13"></label>
+        <input
+          name="add_doctor_experience"
+          type="text"
+          class="form-control"
+          required
+          id="textfield13"
+          size="50"
+        />
+      </td>
+    </tr>
+    <tr>
+      <th>Image</th>
+      <td colspan="2">
+        <label for="fileField"></label>
+        <input
+          type="file"
+          name="add_doctor_image"
+          class="form-control"
+          required
+          id="fileField"
+        />
+        <!-- <div class="input-group">
+          <div class="custom-file">
             <input
-              type="submit"
-              name="button"
-              class="btn btn-primary"
-              id="button"
-              value="ADD"
+              type="file"
+              name="add_disease_image"
+              class="custom-file-input"
+              id="inputGroupFile01"
+              aria-describedby="inputGroupFileAddon01"
             />
+            <label class="custom-file-label" for="inputGroupFile01"
+              >Choose file</label
+            >
           </div>
-        </td>
-      </tr>
-    </table>
-  </form>
-</body>
+        </div> -->
+      </td>
+    </tr>
+    <tr>
+      <th>Place</th>
+      <td colspan="2">
+        <label for="textfield14"></label>
+        <input
+          name="add_doctor_place"
+          class="form-control"
+          type="text"
+          id="textfield14"
+          required
+          size="50"
+        />
+      </td>
+    </tr>
+    <tr>
+      <th>Post</th>
+      <td colspan="2">
+        <label for="textfield16"></label>
+        <input
+          name="add_doctor_post"
+          type="text"
+          class="form-control"
+          required
+          id="textfield16"
+          size="50"
+        />
+      </td>
+    </tr>
+    <tr>
+      <th>PIN</th>
+      <td colspan="2">
+        <label for="textfield17"></label>
+        <input
+          name="add_doctor_pin"
+          type="text"
+          id="textfield17"
+          class="form-control"
+          required
+          pattern="[0-9]{6}"
+          size="50"
+        />
+      </td>
+    </tr>
+    <tr>
+      <th>Email</th>
+      <td colspan="2">
+        <label for="textfield18"></label>
+        <input
+          name="add_doctor_email"
+          type="email"
+          id="textfield18"
+          class="form-control"
+          required
+          size="50"
+        />
+      </td>
+    </tr>
+    <tr>
+      <th>Contact</th>
+      <td colspan="2">
+        <label for="textfield19"></label>
+        <input
+          name="add_doctor_contact"
+          type="text"
+          class="form-control"
+          id="textfield19"
+          required
+          pattern="[0-9]{10}"
+          size="50"
+        />
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3">
+        <div align="center">
+          <input
+            type="submit"
+            name="button"
+            class="btn btn-primary"
+            id="button"
+            value="ADD"
+          />
+        </div>
+      </td>
+    </tr>
+  </table>
+</form>
+
 {% endblock %}

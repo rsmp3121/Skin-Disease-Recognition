@@ -8,6 +8,15 @@
     name="form1"
     id="form1"
   >
+    <div align="center">
+      <img
+        src="{{val['image']}}"
+        alt="image"
+        height="150px"
+        width="150px"
+        class="profile_pic"
+      />
+    </div>
     <table class="table table-hover">
       <tr>
         <td width="97">
@@ -115,12 +124,6 @@
             name="edit_doctor_image"
             id="fileField"
             value="{{val['image']}}"
-          />
-          <img
-            src="{{val['image']}}"
-            alt="image"
-            height="150px"
-            width="150px"
           />
         </td>
       </tr>

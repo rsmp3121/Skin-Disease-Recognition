@@ -17,6 +17,13 @@
       rel="stylesheet"
       href="/static/admin_temp/vendors/css/vendor.bundle.base.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <!-- endinject -->
     <!-- inject:css -->
     <link rel="stylesheet" href="/static/admin_temp/css/style.css" />
@@ -46,12 +53,12 @@
             justify-content-center
           "
         >
-          <a class="navbar-brand brand-logo" href="/admin_dashboard"
-            ><img src="/static/admin_temp/images/logo.svg" alt="logo"
+          <a href="/admin_dashboard"
+            ><img src="/static/DERMACARE-2.png" class="nav-image" alt="logo"
           /></a>
-          <a class="navbar-brand brand-logo-mini" href="/admin_dashboard"
+          <!-- <a class="navbar-brand brand-logo-mini" href="/admin_dashboard"
             ><img src="/static/admin_temp/images/logo-mini.svg" alt="logo"
-          /></a>
+          /></a> -->
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-stretch">
           <div class="search-field d-none d-md-block">
@@ -71,13 +78,13 @@
             </form>
           </div>
           <ul class="navbar-nav navbar-nav-right">
-            <li class="nav-item d-none d-lg-block full-screen-link">
+            <li class="nav-item d-none d-lg-block full-screen-link light">
               <a class="nav-link">
                 <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
               </a>
             </li>
 
-            <li class="nav-item nav-logout d-none d-lg-block">
+            <li class="nav-item nav-logout d-none d-lg-block light">
               <a class="nav-link" href="/logout">
                 <i class="mdi mdi-power"></i>
               </a>
@@ -122,12 +129,14 @@
                 ></i>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/admin_dashboard">
-                <span class="menu-title">Dashboard</span>
-                <i class="mdi mdi-home menu-icon"></i>
-              </a>
-            </li>
+            <div>
+              <li class="nav-item">
+                <a class="nav-link" href="/admin_dashboard">
+                  <span class="menu-title"><b>Dashboard</b> </span>
+                  <i class="mdi mdi-home menu-icon"></i>
+                </a>
+              </li>
+            </div>
             <li class="nav-item">
               <!-- <a
                 class="nav-link"
@@ -159,42 +168,65 @@
                 </ul>
               </div> -->
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/adm_add_disease">
-                <span class="menu-title">Add Disease</span>
-                <i class="mdi mdi-plus-box menu-icon"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/adm_add_doctor">
-                <span class="menu-title">Add Doctor</span>
-                <i class="mdi mdi-account-plus menu-icon"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/adm_view_disease">
-                <span class="menu-title">View Diseases</span>
-                <i class="mdi mdi-view-carousel menu-icon"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/adm_view_doctor">
-                <span class="menu-title">View Doctors</span>
-                <i class="mdi mdi-account-multiple menu-icon"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/adm_view_feedback">
-                <span class="menu-title">Feedback</span>
-                <i class="mdi mdi-checkbox-blank-outline menu-icon"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/adm_view_user">
-                <span class="menu-title">Users</span>
-                <i class="mdi mdi-account menu-icon"></i>
-              </a>
-            </li>
+            <div class="space">
+              <div class="d_hover">
+                <li class="nav-item d_hover">
+                  <a class="nav-link" href="/adm_add_disease">
+                    <span class="menu-title">Add Disease</span>
+                    <i class="far fa-plus-square menu-icon"></i>
+                  </a>
+                </li>
+              </div>
+              <div class="d_hover">
+                <li class="nav-item d_hover">
+                  <a class="nav-link" href="/adm_add_doctor">
+                    <span class="menu-title">Add Doctor</span>
+                    <i class="fas fa-briefcase-medical menu-icon"></i>
+                  </a>
+                </li>
+              </div>
+              <div class="d_hover">
+                <li class="nav-item d_hover">
+                  <a class="nav-link" href="/adm_view_disease">
+                    <span class="menu-title">View Diseases</span>
+                    <i class="fas fa-disease menu-icon"></i>
+                  </a>
+                </li>
+              </div>
+              <div class="d_hover">
+                <li class="nav-item d_hover">
+                  <a class="nav-link" href="/adm_view_doctor">
+                    <span class="menu-title">View Doctors</span>
+                    <i class="fas fa-user-md menu-icon"></i>
+                  </a>
+                </li>
+              </div>
+              <div class="d_hover">
+                <li class="nav-item d_hover">
+                  <a class="nav-link" href="/adm_view_feedback">
+                    <span class="menu-title">Feedback</span>
+                    <i class="far fa-comment-alt menu-icon"></i>
+                  </a>
+                </li>
+              </div>
+              <div class="d_hover">
+                <li class="nav-item">
+                  <a class="nav-link" href="/adm_view_user">
+                    <span class="menu-title">Users</span>
+                    <i class="fas fa-users menu-icon"></i>
+                  </a>
+                </li>
+              </div>
+              <div class="d_hover">
+                <li class="nav-item">
+                  <a class="nav-link" href="/logout">
+                    <span class="menu-title">Logout</span>
+                    <i class="fas fa-sign-out-alt menu-icon"></i>
+                  </a>
+                </li>
+              </div>
+            </div>
+
             <!-- <li class="nav-item">
               <a
                 class="nav-link"
@@ -351,7 +383,7 @@
             <div class="row">{# #}</div>
 
             <div class="row">
-              <div class="col-12 grid-margin">
+              <div class="container">
                 <div class="card">
                   <div class="card-body">
                     <h4 class="card-title">Admin Dashboard</h4>
@@ -495,33 +527,7 @@
           </div>
           <!-- content-wrapper ends -->
           <!-- partial:partials/_footer.html -->
-          <footer class="footer">
-            <div
-              class="
-                d-sm-flex
-                justify-content-center justify-content-sm-between
-              "
-            >
-              <span
-                class="
-                  text-muted text-center text-sm-left
-                  d-block d-sm-inline-block
-                "
-                >Copyright © 2021 <a href="#" target="_blank">RSMP</a>. All
-                rights reserved.</span
-              >
-              <!-- <span
-                class="
-                  float-none float-sm-right
-                  d-block
-                  mt-1 mt-sm-0
-                  text-center
-                "
-                >Hand-crafted & made with
-                <i class="mdi mdi-heart text-danger"></i
-              ></span> -->
-            </div>
-          </footer>
+
           <!-- partial -->
         </div>
         <!-- main-panel ends -->

@@ -18,11 +18,6 @@ def adm_add_disease():
         return redirect(url_for('adm_login'))
 
 
-# @app.route("/")
-# def lo():
-#     return render_template("login.html")
-
-
 @app.route("/adm_add_disease_post", methods=['post'])
 def adm_add_disease_post():
     if session['alid'] == "1":
@@ -35,7 +30,7 @@ def adm_add_disease_post():
         qry = "INSERT INTO disease(NAME,image,descriptions)VALUES('" + \
             name+"','"+path+"','"+description+"')"
         ans = i.insert(qry)
-        return adm_view_disease()
+        return adm_add_disease()
     else:
         return redirect(url_for('adm_login'))
 
@@ -175,7 +170,7 @@ def adm_add_doctor_post():
             "','"+contact+"','"+str(res)+"')"
 
         ans = i.insert(qry)
-        return adm_view_doctor()
+        return adm_add_doctor()
     else:
         return redirect(url_for('adm_login'))
 
@@ -302,7 +297,7 @@ def adm_admin():
 
 @app.route("/adm_login")
 def adm_login():
-    return render_template('/login-page.html')
+    return render_template('/login.html')
 
 
 @app.route("/adm_login_post", methods=['post'])
@@ -326,9 +321,9 @@ def adm_login_post():
 
             return render_template('/doctor/home.html')
         else:
-            return 'Invalid Username/Password'
+            return "<script>alert('Invalid Username or Password');window.location='/'</script>"
     else:
-        return 'Invalid Username/Password'
+        return "<script>alert('Invalid Username or Password');window.location='/'</script>"
 
 
 #---------------login ends--------------------------------------#
@@ -663,7 +658,7 @@ def doctor_change_password_post():
 @app.route('/logout')
 def logout():
     session['alid'] = "0"
-    return render_template('login-page.html')
+    return render_template('login.html')
 
 
 # doctor-change_password-section ends--------------------------------------------------------------------------------------------------------------
@@ -735,18 +730,34 @@ def emp_chat_p(msg):
 
 @app.route('/')
 def login_page():
-    return render_template("login-page.html")
+    return render_template("index.html")
 
 
 @app.route('/admin_dashboard')
 def admin_dashboard():
-    return render_template('/admin/index.html')
+    return render_template('/admin/dashboard.html')
 
 
 @app.route('/doctor_dashboard')
 def doctor_dashboard():
-    return render_template('/doctor/home.html')
+    return render_template('/doctor/doctor-dashboard.html')
 
+# Landing Page
+
+
+# @app.route('/landing_page')
+# def landing_page():
+#     return render_template('index.html')
+
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+
+@app.route('/profile_new')
+def profile_new():
+    return render_template('/doctor/profile-new.html')
 
 # ---------login-temp-anim-codepen
 

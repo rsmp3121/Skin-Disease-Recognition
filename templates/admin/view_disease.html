@@ -1,87 +1,103 @@
 {% extends"admin/index.html" %} {% block body %}
-<body>
-  <form id="form1" name="form1" method="post" action="/adm_view_disease_post">
-    <table class="table table-hover">
-      <tr>
-        <td height="34" colspan="5">
-          <label for="textfield"></label>
-          <div align="center">
-            <input
-              name="disease_search_name"
-              class="form-control"
-              type="text"
-              id="textfield"
-              placeholder="Enter Your Search Text"
-            />
-            <input
-              type="submit"
-              name="button"
-              id="button"
-              value="Search"
-              class="disease_search_name btn btn-primary"
-            />
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <th width="38" height="40">
-          <div align="center">
-            <em><strong>slno</strong></em>
-          </div>
-        </th>
-        <th width="149">
-          <div align="center">
-            <em><strong>Name</strong></em>
-          </div>
-        </th>
-        <!-- <td width="200">
+
+<form id="form1" name="form1" method="post" action="/adm_view_disease_post">
+  <table class="table table-hover">
+    <tr>
+      <td height="34" colspan="3">
+        <div align="center">
+          <input
+            name="disease_search_name"
+            class="form-control"
+            type="text"
+            id="textfield"
+            placeholder="Enter Your Search Text"
+          />
+        </div>
+      </td>
+      <td>
+        <div class="move">
+          <input
+            type="submit"
+            name="button"
+            id="button"
+            value="Search"
+            class="btn btn-primary"
+          />
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <th width="93" height="40">
+        <div align="center">
+          <em><strong>slno</strong></em>
+        </div>
+      </th>
+      <th width="174">
+        <div align="center">
+          <em><strong>Name</strong></em>
+        </div>
+      </th>
+      <!-- <td width="200">
             <div align="center">
               <em><strong>Image</strong></em>
             </div>
           </td> -->
-        <th width="200">
-          <div align="center">
-            <em><strong>Description</strong></em>
-          </div>
-        </th>
-        <th width="50">&nbsp;</th>
-      </tr>
-      {%for i in val%}
-      <tr align="center" class="text-styling">
-        <td>{{loop.index}}</td>
-        <td>
-          {{i['name']}}<br /><br />
-          <img src="{{i['image']}}" alt="Image" height="100" width="100" />
-        </td>
+      <th width="175">
+        <div align="center">
+          <em><strong>Description</strong></em>
+        </div>
+      </th>
+      <th width="57">&nbsp;</th>
+    </tr>
+    {%for i in val%}
+    <tr align="center" class="text-styling">
+      <td>{{loop.index}}</td>
+      <td>
+        {{i['name']}}<br /><br />
+        <img src="{{i['image']}}" alt="Image" height="100" width="100" />
+      </td>
 
-        <td>{{i['descriptions']}}</td>
-        <td>
-          <p align="center">
-            <em
-              ><strong
-                ><a
-                  href="/adm_edit_disease/{{i['disease_id']}}"
-                  class="btn btn-primary"
-                  >Edit</a
-                ></strong
-              ></em
-            >
-          </p>
-          <p align="center">
-            <em
-              ><strong
-                ><a
-                  href="/adm_delete_disease/{{ i['disease_id'] }}"
-                  class="btn btn-danger"
-                  >Delete</a
-                >
-              </strong></em
-            >
-          </p>
-        </td>
-      </tr>
-      {%endfor%}
-    </table>
-  </form>
-</body>
+      <td>{{i['descriptions']}}</td>
+      <td>
+        <p align="center">
+          <em
+            ><strong
+              ><a
+                href="/adm_edit_disease/{{i['disease_id']}}"
+                class="btn btn-primary"
+                >Edit</a
+              ></strong
+            ></em
+          >
+        </p>
+        <p align="center">
+          <em
+            ><strong
+              ><a
+                onclick="return msg()"
+                href="/adm_delete_disease/{{ i['disease_id'] }}"
+                class="btn btn-danger"
+                >Delete</a
+              >
+            </strong></em
+          >
+        </p>
+      </td>
+    </tr>
+    {%endfor%}
+  </table>
+</form>
+<script type="text/javascript" language="JavaScript">
+  function msg() {
+    var flag = true;
+    var a = confirm("wants to delete");
+    if (a == true) {
+      flag = true;
+    } else {
+      flag = false;
+    }
+    return flag;
+  }
+</script>
+
 {% endblock %}

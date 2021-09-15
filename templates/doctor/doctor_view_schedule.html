@@ -8,41 +8,38 @@
   >
     <table class="table table-hover">
       <tr>
-        <td height="31" colspan="4">
-          <label for="textfield"></label>
-          <div>
-            From Date
-            <input
-              name="search_from_date"
-              type="date"
-              class="form-control margin_date"
-              id="textfield"
-              size="35"
-              placeholder="from date"
-            />
-            <br />
-            To Date
-            <input
-              name="search_to_date"
-              type="date"
-              class="form-control margin_date"
-              id="textfield"
-              size="35"
-              placeholder="to date"
-            />
-            <br />
-            <div align="center">
-              <input
-                type="submit"
-                name="button"
-                id="button"
-                class="btn btn-primary"
-                value="search"
-              />
-            </div>
-          </div>
+        <td>
+          <input
+            name="search_from_date"
+            type="date"
+            class="form-control"
+            id="textfield"
+            required
+            placeholder="from date"
+          />
+        </td>
+        <td>
+          <input
+            name="search_to_date"
+            type="date"
+            class="form-control"
+            id="textfield"
+            required
+            placeholder="to date"
+          />
+        </td>
+        <td>
+          <input
+            type="submit"
+            name="button"
+            id="button"
+            class="btn btn-primary"
+            value="search"
+          />
         </td>
       </tr>
+    </table>
+    <table class="table table-hover">
       <tr>
         <td width="115" height="36"><div align="center">From</div></td>
         <td width="134"><div align="center">To</div></td>

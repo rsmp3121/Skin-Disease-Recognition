@@ -1,42 +1,39 @@
-{% extends"admin/index.html" %}
-{%  block body %}
-  <body>
-    <form id="form1" name="form1" method="post" action="">
-      <table class="table table-hover">
-        <tr>
-          <th width="35" height="37">
-            <div align="center">
-            slno
-            </div>
-          </th>
-          <th width="155">
-            <div align="center">
-              <em><strong>Feedback</strong></em>
-            </div>
-          </th>
-          <th width="67">
-            <div align="center">
-              <em><strong>Date</strong></em>
-            </div>
-          </th>
-          <th width="120">
-            <div align="center">
-              <em><strong>UserInfo</strong></em>
-            </div>
-          </th>
-        </tr>
-        {%for i in val%}
-        <tr align="center">
-          <td>{{loop.index}}</td>
-          <td>{{i['feedback']}}</td>
-          <td>{{i['date']}}</td>
-          <td>
-            {{i['name']}}<br />
-            {{i['contact']}}
-          </td>
-        </tr>
-        {%endfor%}
-      </table>
-    </form>
-  </body>
+{% extends"admin/index.html" %} {% block body %}
+
+<form id="form1" name="form1" method="post" action="">
+  <table class="table table-hover">
+    <tr>
+      <th width="35" height="37">
+        <div align="center">slno</div>
+      </th>
+      <th width="155">
+        <div align="center">
+          <em><strong>Feedback</strong></em>
+        </div>
+      </th>
+      <th width="67">
+        <div align="center">
+          <em><strong>Date</strong></em>
+        </div>
+      </th>
+      <th width="120">
+        <div align="center">
+          <em><strong>UserInfo</strong></em>
+        </div>
+      </th>
+    </tr>
+    {%for i in val%}
+    <tr align="center">
+      <td>{{loop.index}}</td>
+      <td>{{i['feedback']}}</td>
+      <td>{{i['date']}}</td>
+      <td>
+        {{i['name']}}<br />
+        {{i['contact']}}
+      </td>
+    </tr>
+    {%endfor%}
+  </table>
+</form>
+
 {% endblock %}

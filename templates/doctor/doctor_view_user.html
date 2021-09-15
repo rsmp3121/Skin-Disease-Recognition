@@ -3,27 +3,27 @@
   <form id="form1" name="form1" method="post" action="/doctor_view_user_post">
     <table class="table table-hover">
       <tr>
-        <td height="34" colspan="7">
-          <label for="textfield"></label>
-          <div align="center">
-            <input
-              type="text"
-              name="user_search_name"
-              class="form-control"
-              id="textfield"
-              placeholder="Enter Your Search Text"
-            />
-            <br />
-            <input
-              type="submit"
-              name="button"
-              id="button"
-              class="btn btn-primary"
-              value="Search"
-            />
-          </div>
+        <td>
+          <input
+            type="text"
+            name="user_search_name"
+            class="form-control"
+            id="textfield"
+            placeholder="Enter Your Search Text"
+          />
+        </td>
+        <td>
+          <input
+            type="submit"
+            name="button"
+            id="button"
+            class="btn btn-primary"
+            value="Search"
+          />
         </td>
       </tr>
+    </table>
+    <table class="table table-hover">
       <tr>
         <td width="39" height="61">
           <div align="center">
@@ -50,17 +50,17 @@
         </td>
         <td width="152">
           <div align="center">
-            <em><strong>Email</strong></em>
+            <em><strong>Contact Details</strong></em>
           </div>
         </td>
-        <td width="154">
+        <!-- <td width="154">
           <div align="center">
             <em><strong>Contact</strong></em>
           </div>
-        </td>
+        </td> -->
         <td width="154">
           <div align="center">
-            <em><strong>Chat</strong></em>
+            <em><strong></strong></em>
           </div>
         </td>
       </tr>
@@ -72,9 +72,8 @@
           {{i['gender']}}<br />
           {{i['date_of_birth']}}
         </td>
-        <td>{{i['place']}},{{i['post']}},{{i['pin']}}</td>
-        <td>{{i['email']}}</td>
-        <td>{{i['contact']}}</td>
+        <td>{{i['place']}}<br />{{i['post']}}<br />{{i['pin']}}</td>
+        <td>{{i['email']}} {{i['contact']}}</td>
         <td>
           <a
             href="/doctor_chat/{{i['login_id']}}/{{ i['name']}}"
