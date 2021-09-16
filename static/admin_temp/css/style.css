@@ -11005,7 +11005,7 @@ textarea.form-control.is-invalid {
 .btn:hover {
   color: #343a40;
   text-decoration: none;
-  transform: scale(1.12);
+  transform: scale(1.02);
 }
 
 .btn:focus,
@@ -23131,9 +23131,9 @@ dl li {
   color: #0050e3;
   font-weight: 400;
 }
-.outline {
+/* .outline {
   outline: none;
-}
+} */
 .margin_date {
   margin-top: 10px;
 }

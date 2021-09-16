@@ -8,7 +8,7 @@
   >
     <table class="table table-hover">
       <tr>
-        <td height="34" colspan="5">
+        <td height="34" colspan="3">
           <label for="textfield"></label>
           <div align="center">
             <input
@@ -16,14 +16,20 @@
               type="text"
               id="textfield"
               class="form-control"
+              required
               placeholder="Enter Your Search Text"
             />
+          </div>
+        </td>
+
+        <td>
+          <div class="move">
             <input
               type="submit"
               name="button"
               id="button"
-              class="disease_search_name btn btn-primary"
               value="Search"
+              class="btn btn-outline-primary"
             />
           </div>
         </td>
@@ -67,7 +73,7 @@
                 <!-- <a href="/adm_edit_disease/{{i['disease_id']}}"
                     >Edit</a
                   > -->
-                <a href="#" class="btn btn-primary">Edit</a>
+                <a href="#" class="btn btn-outline-primary">Edit</a>
               </strong></em
             >
           </p>
@@ -77,7 +83,7 @@
                 <!-- <a href="/adm_delete_disease/{{ i['disease_id'] }}"
                     >Delete</a
                   > -->
-                <a href="#" class="btn btn-danger">Delete</a>
+                <a href="#" class="btn btn-outline-danger">Delete</a>
               </strong></em
             >
           </p>

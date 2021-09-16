@@ -10,6 +10,7 @@
             class="form-control"
             type="text"
             id="textfield"
+            required
             placeholder="Enter Your Search Text"
           />
         </div>
@@ -21,7 +22,7 @@
             name="button"
             id="button"
             value="Search"
-            class="btn btn-primary"
+            class="btn btn-outline-primary"
           />
         </div>
       </td>
@@ -64,7 +65,7 @@
             ><strong
               ><a
                 href="/adm_edit_disease/{{i['disease_id']}}"
-                class="btn btn-primary"
+                class="btn btn-outline-primary"
                 >Edit</a
               ></strong
             ></em
@@ -76,7 +77,7 @@
               ><a
                 onclick="return msg()"
                 href="/adm_delete_disease/{{ i['disease_id'] }}"
-                class="btn btn-danger"
+                class="btn btn-outline-danger"
                 >Delete</a
               >
             </strong></em
