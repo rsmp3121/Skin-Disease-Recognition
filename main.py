@@ -642,7 +642,7 @@ def doctor_change_password_post():
                 qry = "UPDATE login SET PASSWORD='"+new_password + \
                     "' where login_id='"+str(session['lid'])+"'"
                 res = v.update(qry)
-                return render_template('/admin/login.html')
+                return render_template('/login.html')
             else:
                 print('cpass and new pass not same')
                 return render_template('/doctor/doctor_change_password.html')
@@ -743,11 +743,6 @@ def doctor_dashboard():
     return render_template('/doctor/doctor-dashboard.html')
 
 # Landing Page
-
-
-# @app.route('/landing_page')
-# def landing_page():
-#     return render_template('index.html')
 
 
 @app.route('/login')

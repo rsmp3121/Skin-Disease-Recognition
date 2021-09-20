@@ -30,6 +30,7 @@
         </td>
         <td>
           <input
+            style="margin-left: 230px"
             type="submit"
             name="button"
             id="button"
@@ -62,6 +63,7 @@
           </p>
           <p align="center">
             <a
+              onclick="return msg()"
               href="/doctor_delete_schedule/{{i['schedule_id']}}"
               class="btn btn-outline-danger"
               >Delete</a
@@ -72,5 +74,17 @@
       {%endfor%}
     </table>
   </form>
+  <script type="text/javascript" language="JavaScript">
+    function msg() {
+      var flag = true;
+      var a = confirm("Do You Want To Delete..!");
+      if (a == true) {
+        flag = true;
+      } else {
+        flag = false;
+      }
+      return flag;
+    }
+  </script>
 </body>
 {% endblock %}

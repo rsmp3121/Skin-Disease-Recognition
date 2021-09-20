@@ -8,7 +8,7 @@
   >
     <table class="table table-hover">
       <tr>
-        <td height="34" colspan="3">
+        <td height="34" colspan="2">
           <label for="textfield"></label>
           <div align="center">
             <input
@@ -40,7 +40,7 @@
             <em><strong>slno</strong></em>
           </div>
         </td>
-        <td width="149">
+        <td width="400">
           <div align="center">
             <em><strong>Name</strong></em>
           </div>
@@ -60,19 +60,17 @@
       {%for i in val%}
       <tr align="center" class="text-styling">
         <td>{{loop.index}}</td>
-        <td>
-          {{i['name']}}<br />
+        <td style="width: 200px; height: 200px">
+          {{i['name']}}<br /><br />
           <img src="{{i['image']}}" alt="Image" height="100" width="100" />
         </td>
 
         <td>{{i['descriptions']}}</td>
-        <td>
+        <!-- <td>
           <p align="center">
             <em
               ><strong>
-                <!-- <a href="/adm_edit_disease/{{i['disease_id']}}"
-                    >Edit</a
-                  > -->
+               
                 <a href="#" class="btn btn-outline-primary">Edit</a>
               </strong></em
             >
@@ -80,14 +78,12 @@
           <p align="center">
             <em
               ><strong>
-                <!-- <a href="/adm_delete_disease/{{ i['disease_id'] }}"
-                    >Delete</a
-                  > -->
+               
                 <a href="#" class="btn btn-outline-danger">Delete</a>
               </strong></em
             >
           </p>
-        </td>
+        </td> -->
       </tr>
       {%endfor%}
     </table>
