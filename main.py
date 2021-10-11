@@ -1,7 +1,14 @@
-from flask import Flask, render_template, request, session, url_for, jsonify
+from os import name, stat
+from flask import Flask, json, render_template, request, session, url_for, jsonify
 from flask.templating import render_template_string
 from werkzeug.utils import redirect
 from DBConnection import Db
+
+import time
+import datetime
+from encodings.base64_codec import base64_decode
+import base64
+
 app = Flask(__name__)
 app.secret_key = "abc"
 # -------------------------------------------------------------------------------------------------------------------------------#
@@ -760,6 +767,109 @@ def profile_new():
 # @app.route('/anim_log')
 # def anim_log():
 #     return render_template('login-anim.html')
+# user
+
+@app.route('/user_login', methods=['post'])
+def user_login():
+    i = Db()
+    username = request.form['username']
+    password = request.form['password']
+    qry = "SELECT * FROM login WHERE username='" + \
+        username+"' AND PASSWORD='"+password+"'"
+    ans = i.selectOne(qry)
+    if ans is not None:
+        type = ans['usertype']
+        if type == "user":
+            qry1 = "select * from user where login_id = '" + \
+                str(ans['login_id'])+"'"
+            res = i.selectOne(qry1)
+            return jsonify(status="ok", name=res['name'], image=res['image'], lid=ans['login_id'], type=ans['usertype'])
+        else:
+            return jsonify(status="no")
+    else:
+        return jsonify(status="no")
+
+
+@app.route('/user_view_profile', methods=['post'])
+def user_view_profile():
+    v = Db()
+    login_id = request.form['loginId']
+    qry = "select * from user where login_id ='"+login_id+"'"
+    ans = v.selectOne(qry)
+    if ans is not None:
+        return jsonify(status="ok", name=ans['name'], gender=ans['gender'], date_of_birth=['date_of_birth'], image=ans['image'], place=ans['place'], post=ans['post'], pin=ans['pin'], email=ans['email'], contact=ans['contact'])
+    else:
+        return jsonify(status="no")
+
+
+@app.route('/user_view_doctorSchedule', methods=['post'])
+def user_view_doctorSchedule():
+    v = Db()
+    login_id = request.form['login_id']
+    qry = "select * from doctor where doctor_id='"+login_id+"'"
+    ans = v.selectOne(qry)
+    if ans is not None:
+        return jsonify(status="ok", name=ans['name'], gender=ans['gender'], qualification=ans['qualification'], experience=ans['experience'], image=ans['image'], place=ans['place'], post=ans['post'], pin=ans['pin'], email=ans['email'], contact=ans['contact'])
+    else:
+        return jsonify(status="no")
+
+
+@app.route('/user_view_doctors', methods=['post'])
+def user_view_doctors():
+    v = Db()
+
+    qry = "select * from doctor"
+    ans = v.select(qry)
+    return jsonify(status="ok", name=ans['name'], qualification=ans['qualification'], experience=ans['experience'], image=ans['image'])
+
+
+@app.route('/user_register', methods=['post'])
+def user_register():
+    i = Db()
+    name = request.form['name']
+    gender = request.form['gender']
+    dob = request.form['dob']
+    image = request.form['img']
+    place = request.form['place']
+    post = request.form['post']
+    pin = request.form['pin']
+    email = request.form['email']
+    phone = request.form['phone']
+
+    timestr = time.strftime("%Y%m%d-%H%M%S")
+    print(timestr)
+    a = base64.b64decode(image)
+    fh = open("C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\user_images\\" + timestr + ".jpg", "wb")
+    path = "/static/user_images/" + timestr + ".jpg"
+    fh.write(a)
+    fh.close()
+
+    qry1 = "INSERT INTO login(username,PASSWORD,usertype)VALUES('" + \
+        email+"','"+phone+"','user')"
+    ans1 = i.insert(qry1)
+    qry = "INSERT INTO USER(NAME,gender,date_of_birth,image,place,post,pin,email,contact,login_id)VALUES('" + name+"','"+gender+"','"+dob+"','"+path+"','"+place+"','" + \
+        post+"','"+pin+"','"+email+"','"+phone+"','"+str(ans1)+"')"
+
+    ans = i.insert(qry)
+    return jsonify(status="ok",)
+
+
+@app.route('/user_UploadImage', methods=['post'])
+def upload_Image():
+    i = Db()
+    image = request.files['diseaseImage']
+
+    timestr = time.strftime("%Y%m%d-%H%M%S")
+    print(timestr)
+    a = base64.b64decode(image)
+    fh = open("C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\userDisease_Images\\" + timestr + ".jpg", "wb")
+    path = "/static/userDisease_Images/" + timestr + ".jpg"
+    fh.write(a)
+    fh.close()
+    qry = "insert into user(image)values('"+path+"')"
+    ans = i.insert(qry)
+    return jsonify(status="ok")
+
 
 if __name__ == "__main__":
-    app.run(port=8000, debug=True)
+    app.run(port=5000, debug=True, host='0.0.0.0')
