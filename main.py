@@ -808,8 +808,9 @@ def user_view_doctorSchedule():
     login_id = request.form['login_id']
     qry = "select * from doctor where doctor_id='"+login_id+"'"
     ans = v.selectOne(qry)
+
     if ans is not None:
-        return jsonify(status="ok", name=ans['name'], gender=ans['gender'], qualification=ans['qualification'], experience=ans['experience'], image=ans['image'], place=ans['place'], post=ans['post'], pin=ans['pin'], email=ans['email'], contact=ans['contact'])
+        return jsonify(status="ok", name=ans['name'], gender=ans['gender'], qualification=ans['qualification'], experience=ans['experience'], image=ans['image'], place=ans['place'], post=ans['post'], pin=ans['pin'], email=ans['email'], contact=ans['contact'], users=data)
     else:
         return jsonify(status="no")
 
@@ -820,7 +821,8 @@ def user_view_doctors():
 
     qry = "select * from doctor"
     ans = v.select(qry)
-    return jsonify(status="ok", name=ans['name'], qualification=ans['qualification'], experience=ans['experience'], image=ans['image'])
+    print(ans)
+    return jsonify(status="ok", data=ans)
 
 
 @app.route('/user_register', methods=['post'])
@@ -857,10 +859,10 @@ def user_register():
 @app.route('/user_UploadImage', methods=['post'])
 def upload_Image():
     i = Db()
-    image = request.files['diseaseImage']
-
+    image = request.form['diseaseImage']
     timestr = time.strftime("%Y%m%d-%H%M%S")
-    print(timestr)
+    print("=================okkkkkkkkk")
+
     a = base64.b64decode(image)
     fh = open("C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\userDisease_Images\\" + timestr + ".jpg", "wb")
     path = "/static/userDisease_Images/" + timestr + ".jpg"
@@ -868,6 +870,40 @@ def upload_Image():
     fh.close()
     qry = "insert into user(image)values('"+path+"')"
     ans = i.insert(qry)
+    return jsonify(status="ok")
+
+
+@app.route('/view_doctorMore', methods=["post"])
+def view_doctorMore():
+    i = Db()
+    lid = request.form['lid']
+    qry = "select * from doctor where login_id='"+lid+"'"
+    ans = i.selectOne(qry)
+    qry1 = "SELECT * FROM schedule WHERE doctor_id='" + lid+"' AND date>= CURDATE()"
+    data = i.select(qry1)
+    print(data)
+    return jsonify(status="ok", name=ans['name'], gender=ans['gender'], qualification=ans['qualification'], experience=ans['experience'], image=ans['image'], place=ans['place'], post=ans['post'], email=ans['email'], pin=ans['pin'], contact=ans['contact'], users=data)
+
+
+@app.route('/user_SendFeedback', methods=['post'])
+def user_SendFeedback():
+    i = Db()
+    feedback = request.form['feedback']
+    lid = request.form['loginId']
+    qry = "insert into feedback(feedback,user_id,date)values('" + \
+        feedback+"','"+lid+"',curdate())"
+    ans = i.insert(qry)
+    return jsonify(status="ok")
+
+
+@app.route('/user_bookdoctor', methods=['post'])
+def user_SendFeedback():
+    i = Db()
+    doc_id = request.form['doc_id']
+    lid = request.form['loginId']
+    sch_id = request.form['schedule_id']
+    # qry = "insert into feedback(feedback,user_id,date)values('" + \ feedback+"','"+lid+"',curdate())"
+    # ans = i.insert(qry)
     return jsonify(status="ok")
 
 
