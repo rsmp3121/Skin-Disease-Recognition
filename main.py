@@ -1,3 +1,4 @@
+from logging import log
 from os import name, stat
 from flask import Flask, json, render_template, request, session, url_for, jsonify
 from flask.templating import render_template_string
@@ -797,7 +798,7 @@ def user_view_profile():
     qry = "select * from user where login_id ='"+login_id+"'"
     ans = v.selectOne(qry)
     if ans is not None:
-        return jsonify(status="ok", name=ans['name'], gender=ans['gender'], date_of_birth=['date_of_birth'], image=ans['image'], place=ans['place'], post=ans['post'], pin=ans['pin'], email=ans['email'], contact=ans['contact'])
+        return jsonify(status="ok", name=ans['name'], gender=ans['gender'], date_of_birth=ans['date_of_birth'], image=ans['image'], place=ans['place'], post=ans['post'], pin=ans['pin'], email=ans['email'], contact=ans['contact'])
     else:
         return jsonify(status="no")
 
@@ -885,6 +886,36 @@ def view_doctorMore():
     return jsonify(status="ok", name=ans['name'], gender=ans['gender'], qualification=ans['qualification'], experience=ans['experience'], image=ans['image'], place=ans['place'], post=ans['post'], email=ans['email'], pin=ans['pin'], contact=ans['contact'], users=data)
 
 
+@app.route('/in_message', methods=['POST'])
+def message():
+    c = Db()
+    fr_id = request.form["fid"]
+    to_id = request.form["toid"]
+    message = request.form["msg"]
+    print("------------------------------------------------"+message)
+    query7 = "INSERT INTO chat(from_id,to_id,message,date,time) VALUES ('" + \
+        fr_id + "' ,'" + to_id + "','" + message + "',CURDATE(),CURTIME())"
+    print(query7)
+    m = c.insert(query7)
+    if m == 1:
+        return jsonify(status='send')
+    else:
+        return jsonify(status='failed')
+
+
+@app.route('/view_message2', methods=['POST'])
+def msg():
+    fid = request.form["fid"]
+    toid = request.form["toid"]
+    lmid = request.form['lastmsgid']
+    query = "SELECT from_id,message,DATE,chat_id FROM chat WHERE chat_id>'"+lmid + \
+        "' AND ((to_id='"+toid+"' AND  from_id='"+fid+"') OR (to_id='" + \
+        fid+"' AND from_id='"+toid+"')  )  ORDER BY chat_id ASC"
+    c = Db()
+    res = c.select(query)
+    return jsonify(status='ok', res1=res)
+
+
 @app.route('/user_SendFeedback', methods=['post'])
 def user_SendFeedback():
     i = Db()
@@ -897,13 +928,53 @@ def user_SendFeedback():
 
 
 @app.route('/user_bookdoctor', methods=['post'])
-def user_SendFeedback():
+def user_bookdoctor():
     i = Db()
     doc_id = request.form['doc_id']
     lid = request.form['loginId']
     sch_id = request.form['schedule_id']
     # qry = "insert into feedback(feedback,user_id,date)values('" + \ feedback+"','"+lid+"',curdate())"
     # ans = i.insert(qry)
+    return jsonify(status="ok")
+
+
+@app.route('/user_bookSchedule', methods=['post'])
+def user_bookSchedule():
+    i = Db()
+    schedule_id = request.form['schedule_id']
+    user_id = request.form['user_id']
+    qry = "INSERT INTO book(schedule_id,user_id,STATUS)VALUES('" + \
+        schedule_id+"','"+user_id+"','ok')"
+    res = i.insert(qry)
+    return jsonify(status="ok")
+
+
+@app.route('/user_viewBookSchedule', methods=['post'])
+def user_viewBookSchedule():
+    i = Db()
+    qry = "select * from book"
+    res = i.insert(qry)
+    return jsonify(status="ok")
+
+
+@app.route('/userviewmyshedule', methods=['post'])
+def userviewmyshedule():
+    i = Db()
+    lid = request.form['lid']
+    qry = "SELECT `book`.*,`schedule`.*,`doctor`.`name`,`doctor`.`qualification` FROM `doctor`,`schedule`,`book`,USER WHERE `book`.`schedule_id`=`schedule`.`schedule_id` AND `book`.`user_id`=`user`.`login_id` AND `user`.`login_id`='" + \
+        lid+"''' AND `schedule`.`doctor_id`=`doctor`.`login_id`"
+    res = i.select(qry)
+    print('--------------------------')
+    print(res)
+    return jsonify(status="ok", data=res)
+
+
+@app.route('/userBookCancel', methods=['post'])
+def userBookCancel():
+    i = Db()
+    bid = request.form['bid']
+    qry = "delete from book  where book_id = '"+bid+"'"
+    res = i.delete(qry)
     return jsonify(status="ok")
 
 
