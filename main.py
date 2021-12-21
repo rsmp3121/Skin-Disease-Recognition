@@ -687,7 +687,7 @@ def doctor_chat(id, name):
 @app.route("/emp_chat_chk", methods=['post'])
 def emp_chat_chk():
     uid = str(session["toid"])
-    qry = "select date_and_time,message,from_id from chat where (from_id='" + str(
+    qry = "select date,time,message,from_id from chat where (from_id='" + str(
         session['lid']) + "' and to_id='" + uid + "') or ((from_id='" + uid + "' and to_id='" + str(
         session['lid']) + "')) order by chat_id desc"
     c = Db()
@@ -700,38 +700,32 @@ def emp_chat_chk():
 def emp_chat_post():
     id = str(session["toid"])
     ta = request.form["ta"]
-    qry = "insert into chat(date_and_time,message,from_id,to_id) values(CURDATE(),'" + \
+    qry = "insert into chat(date,time,message,from_id,to_id) values(CURDATE(),CURTIME(),'" + \
         ta+"','"+str(session['lid'])+"','"+id+"')"
     d = Db()
     d.insert(qry)
-    qry = "select date_and_time,message,from_id from chat where (from_id='" + str(
-        session['lid']) + "' and to_id='" + id + "') or ((from_id='" + id + "' and to_id='" + str(
-        session['lid']) + "')) order by chat_id desc"
-    c = Db()
-    res = c.select(qry)
-    print(res)
     # return jsonify(res)
     return render_template('doctor/chat.html', toid=id)
 
 
-@app.route("/emp_chat_p/<msg>")
-def emp_chat_p(msg):
-    id = str(session["toid"])
-    ta = msg
-    qry = "insert into chat(date_and_time,message,from_id,to_id) values(CURDATE(),'" + \
-        ta+"','"+str(session['lid'])+"','"+id+"')"
-    print(qry)
-    d = Db()
-    d.insert(qry)
-    qry = "select date_and_time,message,from_id from chat where (from_id='" + str(
-        session['lid']) + "' and to_id='" + id + "') or ((from_id='" + id + "' and to_id='" + str(
-        session['lid']) + "')) order by chat_id desc"
-    c = Db()
-    res = c.select(qry)
-    print(res)
-    # return jsonify(res)
-    # return render_template('doctor/chat.html', toid=id)
-    return jsonify(status="ok")
+# @app.route("/emp_chat_p/<msg>")
+# def emp_chat_p(msg):
+#     id = str(session["toid"])
+#     ta = msg
+#     qry = "insert into chat(date,time,message,from_id,to_id) values(CURDATE(),CURTIME(),'" + \
+#         ta+"','"+str(session['lid'])+"','"+id+"')"
+#     print(qry)
+#     d = Db()
+#     d.insert(qry)
+#     qry = "select DATE_FORMAT(date,'%d%m%y') as date,time,message,from_id from chat where (from_id='" + str(
+#         session['lid']) + "' and to_id='" + id + "') or ((from_id='" + id + "' and to_id='" + str(
+#         session['lid']) + "')) order by chat_id desc"
+#     c = Db()
+#     res = c.select(qry)
+#     print(res)
+#     # return jsonify(res)
+#     # return render_template('doctor/chat.html', toid=id)
+#     return jsonify(status="ok")
 
 # login page
 
@@ -795,7 +789,9 @@ def user_login():
 def user_view_profile():
     v = Db()
     login_id = request.form['loginId']
-    qry = "select * from user where login_id ='"+login_id+"'"
+    qry = "select DATE_FORMAT(date_of_birth,'%d-%m-%y') as date_of_birth, name,gender,image,place,post,pin,email,contact from user where login_id ='"+login_id+"'"
+    ans = v.selectOne(qry)
+
     ans = v.selectOne(qry)
     if ans is not None:
         return jsonify(status="ok", name=ans['name'], gender=ans['gender'], date_of_birth=ans['date_of_birth'], image=ans['image'], place=ans['place'], post=ans['post'], pin=ans['pin'], email=ans['email'], contact=ans['contact'])
@@ -880,7 +876,8 @@ def view_doctorMore():
     lid = request.form['lid']
     qry = "select * from doctor where login_id='"+lid+"'"
     ans = i.selectOne(qry)
-    qry1 = "SELECT * FROM schedule WHERE doctor_id='" + lid+"' AND date>= CURDATE()"
+    qry1 = "SELECT DATE_FORMAT(date,'%d-%m-%y') as date,from_time,to_time,doctor_id,schedule_id FROM schedule WHERE doctor_id='" + \
+        lid+"' AND date>= CURDATE()"
     data = i.select(qry1)
     print(data)
     return jsonify(status="ok", name=ans['name'], gender=ans['gender'], qualification=ans['qualification'], experience=ans['experience'], image=ans['image'], place=ans['place'], post=ans['post'], email=ans['email'], pin=ans['pin'], contact=ans['contact'], users=data)
@@ -908,7 +905,7 @@ def msg():
     fid = request.form["fid"]
     toid = request.form["toid"]
     lmid = request.form['lastmsgid']
-    query = "SELECT from_id,message,DATE,chat_id FROM chat WHERE chat_id>'"+lmid + \
+    query = "SELECT from_id,message,date,chat_id FROM chat WHERE chat_id>'"+lmid + \
         "' AND ((to_id='"+toid+"' AND  from_id='"+fid+"') OR (to_id='" + \
         fid+"' AND from_id='"+toid+"')  )  ORDER BY chat_id ASC"
     c = Db()
@@ -961,6 +958,7 @@ def user_viewBookSchedule():
 def userviewmyshedule():
     i = Db()
     lid = request.form['lid']
+    timestr = time.strftime("%d-%m-%Y")
     qry = "SELECT `book`.*,`schedule`.*,`doctor`.`name`,`doctor`.`qualification` FROM `doctor`,`schedule`,`book`,USER WHERE `book`.`schedule_id`=`schedule`.`schedule_id` AND `book`.`user_id`=`user`.`login_id` AND `user`.`login_id`='" + \
         lid+"''' AND `schedule`.`doctor_id`=`doctor`.`login_id`"
     res = i.select(qry)
@@ -976,6 +974,75 @@ def userBookCancel():
     qry = "delete from book  where book_id = '"+bid+"'"
     res = i.delete(qry)
     return jsonify(status="ok")
+
+
+@app.route('/user_view_profile1', methods=['post'])
+def user_view_profile1():
+    v = Db()
+    login_id = request.form['loginId']
+    qry = "select DATE_FORMAT(date_of_birth,'%d-%m-%y') as date_of_birth, name,gender,image,place,post,pin,email,contact from user where login_id ='"+login_id+"'"
+    ans = v.selectOne(qry)
+    print(ans)
+    if ans is not None:
+        return jsonify(status="ok", name=ans['name'], gender=ans['gender'], date_of_birth=ans['date_of_birth'], image=ans['image'], place=ans['place'], post=ans['post'], pin=ans['pin'], email=ans['email'], contact=ans['contact'])
+    else:
+        return jsonify(status="no")
+
+# DATE_FORMAT(date_of_birth,'%d%m%y')
+# DATA_FORMAT(date,'%d%m%y') as date
+
+# --------------
+
+
+@app.route('/user_p_Page', methods=['post'])
+def user_p_Page():
+    v = Db()
+    login_id = request.form['loginId']
+    qry = "select * from user where login_id ='"+login_id+"'"
+    ans = v.selectOne(qry)
+    if ans is not None:
+        return jsonify(status="ok", name=ans['name'], image=ans['image'])
+    else:
+        return jsonify(status="no")
+
+
+@app.route('/user_update_profile', methods=['post'])
+def user_update_profile():
+    i = Db()
+    p_Name = request.form['name']
+    p_Gen = request.form['gender']
+    p_DOB = request.form['dob']
+
+    p_Place = request.form['place']
+    p_Post = request.form['post']
+    p_Pin = request.form['pin']
+    p_Contact = request.form['phone']
+    image = request.form['img']
+    lid = request.form['login_id']
+    if image == "aa":
+        qry = "update user set name = '"+p_Name+"',gender ='"+p_Gen+"',date_of_birth='"+p_DOB + \
+            "',place='"+p_Place+"',post='" + \
+            p_Post+"',pin='"+p_Pin+"',contact='"+p_Contact+"' where login_id='"+lid+"'"
+        ans = i.update(qry)
+        print('----------------')
+        print(ans)
+        return jsonify(status="ok")
+    else:
+        timestr = time.strftime("%Y%m%d-%H%M%S")
+        print(timestr)
+        a = base64.b64decode(image)
+        fh = open("C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\user_images\\" + timestr + ".jpg", "wb")
+        path = "/static/user_images/" + timestr + ".jpg"
+        fh.write(a)
+        fh.close()
+
+        qry = "update user set name = '"+p_Name+"',gender ='"+p_Gen+"',date_of_birth='"+p_DOB + \
+            "',image='"+path+"',place='"+p_Place+"',post='" + \
+            p_Post+"',pin='"+p_Pin+"',contact='"+p_Contact+"' where login_id='"+lid+"'"
+        ans = i.update(qry)
+        print('----------------')
+        print(ans)
+        return jsonify(status="ok")
 
 
 if __name__ == "__main__":

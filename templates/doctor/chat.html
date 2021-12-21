@@ -1,5 +1,5 @@
 {% extends"doctor/home.html" %} {% block body %}
-<form id="form1" name="form1">
+<form id="form1" name="form1" action="/emp_chat_post" method="post">
   <center>
     <h4><i>CHAT WITH DOCTOR</i></h4>
   </center>
@@ -55,16 +55,19 @@
             var ln = response.length;
             for (i = 0; i < ln; i++) {
               var id = response[i]["from_id"];
-              var date = response[i]["date_and_time"];
+              var date = response[i]["date"];
+              var time = response[i]["time"];
               var message = response[i]["message"];
               if (toid != id) {
                 // outgoing message
                 $("#tbl_msg").append(
-                  "<tr><td class='pull-left' style='width: 50%;'></td><td class='pull-right' style='width: 50%;background-color: #78CF8A;border-radius: 10px;'><div class='row'><div class='col-md-6'>ME</div><div class='col-md-6' align='right'>" +
+                  "<tr><td class='pull-left' style='width: 50%;'></td><td class='pull-right' style='width: 50%;background-color: #78CF8A;border-radius: 10px;'><div class='row'><div class='col-md-6'>ME</div><div class='col-md-6' align='right'> " +
                     date +
                     "</div><div class='col-md-12'><h4>" +
+                    time +
+                    "</div><div class='col-md-12'><h4>" +
                     message +
-                    "</h4></div></div></td></tr>"
+                    "</h4></div></div></td></tr> "
                 );
               }
               if (toid == id) {
@@ -74,6 +77,8 @@
                     name +
                     "</div><div class='col-md-6' align='right'>" +
                     date +
+                    "</div><div class='col-md-12'><h4>" +
+                    time +
                     "</div><div class='col-md-12'><h4>" +
                     message +
                     "</h4></div></div></td><td class='pull-right' style='width: 50%;'></td></tr>"
@@ -121,13 +126,17 @@
               var ln = response.length;
               for (i = 0; i < ln; i++) {
                 var id = response[i]["from_id"];
-                var date = response[i]["date_and_time"];
+                var date = response[i]["date"];
+                var time = response[i]["time"];
                 var message = response[i]["message"];
+                alert(id);
                 if (toid != id) {
                   // outgoing message
                   $("#tbl_msg").append(
                     "<tr><td class='pull-left' style='width: 50%;'></td><td class='pull-right' style='width: 50%;background-color: #78CF8A;border-radius: 10px;'><div class='row'><div class='col-md-6'>ME</div><div class='col-md-6' align='right'>" +
                       date +
+                      "</div><div class='col-md-12'><h4>" +
+                      time +
                       "</div><div class='col-md-12'><h4>" +
                       message +
                       "</h4></div></div></td></tr>"
@@ -140,6 +149,8 @@
                       name +
                       "</div><div class='col-md-6' align='right'>" +
                       date +
+                      "</div><div class='col-md-12'><h4>" +
+                      time +
                       "</div><div class='col-md-12'><h4>" +
                       message +
                       "</h4></div></div></td><td class='pull-right' style='width: 50%;'></td></tr>"
