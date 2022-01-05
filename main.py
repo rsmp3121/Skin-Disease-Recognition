@@ -676,89 +676,7 @@ def logout():
 
 # doctor-change_password-section ends--------------------------------------------------------------------------------------------------------------
 
-@app.route('/doctor_Detect_Disease')
-def doctor_Detect_Disease():
-    if session['alid'] == "1":
-        return render_template('/doctor/doctor_detect.html')
-    else:
-        return redirect(url_for('adm_login'))
 
-
-@app.route('/doctor_Detect_Disease_post', methods=['post'])
-def doctor_Detect_Disease_post():
-    import numpy as np
-    from skimage import io, color, img_as_ubyte
-
-    from skimage.feature import greycomatrix, greycoprops
-    from sklearn.metrics.cluster import entropy
-
-    image = request.files['upload_Detect_Image']
-    image.save('C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\static\\testImage\\'+image.filename)
-    path = 'C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\testImage\\'+image.filename
-
-    rgbImg = io.imread(path)
-    grayImg = img_as_ubyte(color.rgb2gray(rgbImg))
-
-    distances = [1, 2, 3]
-    angles = [0, np.pi / 4, np.pi / 2, 3 * np.pi / 4]
-    properties = ['energy', 'homogeneity',
-                  'dissimilarity', 'correlation', 'contrast']
-
-    glcm = greycomatrix(grayImg,
-                        distances=distances,
-                        angles=angles,
-                        symmetric=True,
-                        normed=True)
-
-    feats = np.hstack([greycoprops(glcm, 'homogeneity').ravel()
-                       for prop in properties])
-    feats1 = np.hstack([greycoprops(glcm, 'energy').ravel()
-                        for prop in properties])
-    feats2 = np.hstack(
-        [greycoprops(glcm, 'dissimilarity').ravel() for prop in properties])
-    feats3 = np.hstack(
-        [greycoprops(glcm, 'correlation').ravel() for prop in properties])
-    feats4 = np.hstack([greycoprops(glcm, 'contrast').ravel()
-                        for prop in properties])
-
-    k = np.mean(feats)
-    l = np.mean(feats1)
-    m = np.mean(feats2)
-    n = np.mean(feats3)
-    o = np.mean(feats4)
-    print(k)
-    print(l)
-    print(m)
-    print(n)
-    print(o)
-
-    aa = [k, l, m, n, o]
-
-    df = pd.read_csv('dataSet.csv')
-    attributes = df.values[:, 0:5]
-    # print(len(attributes))
-    label = df.values[:, 6]
-    # print(len(label))
-    str(df)
-
-    # print(attributes)
-    # print(label)
-    from sklearn.model_selection import train_test_split
-
-    X_train, X_test, y_train, y_test = train_test_split(
-        attributes, label, test_size=0.1, random_state=42)
-
-    from sklearn.ensemble import RandomForestClassifier
-    a = RandomForestClassifier(n_estimators=100)
-
-    a.fit(X_train, y_train)
-
-    predictedresult = a.predict([aa])
-    print(predictedresult)
-    print("ppp")
-
-    return str(predictedresult[0])
-    # return render_template('/doctor/doctor_detect.html')
 # -------------------------------------------------------------------------------------------------------------------------------#
     # Doctor Ends#               /\/\/\/\/\/\/\\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\\/\/\/\/\/\/\/
 # -------------------------------------------------------------------------------------------------------------------------------#
@@ -1143,9 +1061,9 @@ def data_train():
     from skimage.feature import greycomatrix, greycoprops
     from sklearn.metrics.cluster import entropy
     # img = cv2.imread(path)
-    aa = ['Acne and Rosacea Photos', 'Actinic Keratosis Basal Cell Carcinoma and other Malignant Lesions',
-          'Atopic Dermatitis Photos', 'Bullous Disease Photos', 'Cellulitis Impetigo and other Bacterial Infections', 'Eczema Photos', 'Exanthems and Drug Eruptions', 'Herpes HPV and other STDs Photos', 'Light Diseases and Disorders of Pigmentation', 'Lupus and other Connective Tissue diseases', 'Melanoma Skin Cancer Nevi and Moles', 'Poison Ivy Photos and other Contact Dermatitis', 'Psoriasis pictures Lichen Planus and related diseases', 'Scabies Lyme Disease and other Infestations and Bites', 'Seborrheic Keratoses and other Benign Tumors', 'Systemic Disease', 'Tinea Ringworm Candidiasis and other Fungal Infections', 'Urticaria Hives', 'Vascular Tumors', 'Vasculitis Photos', 'Warts Molluscum and other Viral Infections']
-    # aa = ['Acne and Rosacea Photos']
+    # aa = ['Acne and Rosacea Photos', 'Actinic Keratosis Basal Cell Carcinoma and other Malignant Lesions',
+    #       'Atopic Dermatitis Photos', 'Bullous Disease Photos', 'Cellulitis Impetigo and other Bacterial Infections', 'Eczema Photos', 'Exanthems and Drug Eruptions', 'Herpes HPV and other STDs Photos', 'Light Diseases and Disorders of Pigmentation', 'Lupus and other Connective Tissue diseases', 'Melanoma Skin Cancer Nevi and Moles', 'Poison Ivy Photos and other Contact Dermatitis', 'Psoriasis pictures Lichen Planus and related diseases', 'Scabies Lyme Disease and other Infestations and Bites', 'Seborrheic Keratoses and other Benign Tumors', 'Systemic Disease', 'Tinea Ringworm Candidiasis and other Fungal Infections', 'Urticaria Hives', 'Vascular Tumors', 'Vasculitis Photos', 'Warts Molluscum and other Viral Infections']
+    aa = ['acne', 'actinic kerotoses', 'eczema']
     for i in aa:
         print(i)
     # search = str(input('Enter the folder name'))
@@ -1212,7 +1130,7 @@ def data_train():
                 alllist, columns=['f1', 'f2', 'f3', 'f4', 'f5', 'Disease'])
 
             data.to_csv(
-                'C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\dataSet.csv')
+                'C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\dataSet1.csv')
 
     from sklearn.model_selection import train_test_split
 
@@ -1317,6 +1235,94 @@ def testing():
 
     # print(sc)
     return str(predictedresult[0])
+
+# --------------------------
+
+
+@app.route('/doctor_Detect_Disease')
+def doctor_Detect_Disease():
+    if session['alid'] == "1":
+        return render_template('/doctor/doctor_detect.html')
+    else:
+        return redirect(url_for('adm_login'))
+
+
+@app.route('/doctor_Detect_Disease_post', methods=['post'])
+def doctor_Detect_Disease_post():
+    import numpy as np
+    from skimage import io, color, img_as_ubyte
+
+    from skimage.feature import greycomatrix, greycoprops
+    from sklearn.metrics.cluster import entropy
+
+    image = request.files['upload_Detect_Image']
+    image.save('C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\static\\testImage\\'+image.filename)
+    path = 'C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\testImage\\'+image.filename
+
+    rgbImg = io.imread(path)
+    grayImg = img_as_ubyte(color.rgb2gray(rgbImg))
+
+    distances = [1, 2, 3]
+    angles = [0, np.pi / 4, np.pi / 2, 3 * np.pi / 4]
+    properties = ['energy', 'homogeneity',
+                  'dissimilarity', 'correlation', 'contrast']
+
+    glcm = greycomatrix(grayImg,
+                        distances=distances,
+                        angles=angles,
+                        symmetric=True,
+                        normed=True)
+
+    feats = np.hstack([greycoprops(glcm, 'homogeneity').ravel()
+                       for prop in properties])
+    feats1 = np.hstack([greycoprops(glcm, 'energy').ravel()
+                        for prop in properties])
+    feats2 = np.hstack(
+        [greycoprops(glcm, 'dissimilarity').ravel() for prop in properties])
+    feats3 = np.hstack(
+        [greycoprops(glcm, 'correlation').ravel() for prop in properties])
+    feats4 = np.hstack([greycoprops(glcm, 'contrast').ravel()
+                        for prop in properties])
+
+    k = np.mean(feats)
+    l = np.mean(feats1)
+    m = np.mean(feats2)
+    n = np.mean(feats3)
+    o = np.mean(feats4)
+    print(k)
+    print(l)
+    print(m)
+    print(n)
+    print(o)
+
+    aa = [k, l, m, n, o]
+
+    df = pd.read_csv(
+        'C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\dataSet1.csv')
+    attributes = df.values[:, 0:5]
+    # print(len(attributes))
+    label = df.values[:, 6]
+    # print(len(label))
+    str(df)
+
+    # print(attributes)
+    # print(label)
+    from sklearn.model_selection import train_test_split
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        attributes, label, test_size=0.1, random_state=42)
+
+    from sklearn.ensemble import RandomForestClassifier
+    a = RandomForestClassifier(n_estimators=100)
+
+    a.fit(X_train, y_train)
+
+    predictedresult = a.predict([aa])
+    print(predictedresult)
+    print("ppp")
+
+    return str(predictedresult[0])
+    # return render_template('/doctor/doctor_detect.html')
 
 
 if __name__ == "__main__":
