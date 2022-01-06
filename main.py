@@ -872,8 +872,7 @@ def upload_Image():
     path = "/static/userDisease_Images/" + timestr + ".jpg"
     fh.write(a)
     fh.close()
-    qry = "insert into user(image)values('"+path+"')"
-    ans = i.insert(qry)
+
     return jsonify(status="ok")
 
 
@@ -1063,7 +1062,8 @@ def data_train():
     # img = cv2.imread(path)
     # aa = ['Acne and Rosacea Photos', 'Actinic Keratosis Basal Cell Carcinoma and other Malignant Lesions',
     #       'Atopic Dermatitis Photos', 'Bullous Disease Photos', 'Cellulitis Impetigo and other Bacterial Infections', 'Eczema Photos', 'Exanthems and Drug Eruptions', 'Herpes HPV and other STDs Photos', 'Light Diseases and Disorders of Pigmentation', 'Lupus and other Connective Tissue diseases', 'Melanoma Skin Cancer Nevi and Moles', 'Poison Ivy Photos and other Contact Dermatitis', 'Psoriasis pictures Lichen Planus and related diseases', 'Scabies Lyme Disease and other Infestations and Bites', 'Seborrheic Keratoses and other Benign Tumors', 'Systemic Disease', 'Tinea Ringworm Candidiasis and other Fungal Infections', 'Urticaria Hives', 'Vascular Tumors', 'Vasculitis Photos', 'Warts Molluscum and other Viral Infections']
-    aa = ['acne', 'actinic kerotoses', 'eczema']
+    aa = ['athelets_foot', 'cracked_heels', 'facial_acne',
+          'melona_on_the_nail_unit', 'rashes_affecting_lower_leg']
     for i in aa:
         print(i)
     # search = str(input('Enter the folder name'))
@@ -1296,33 +1296,33 @@ def doctor_Detect_Disease_post():
     print(o)
 
     aa = [k, l, m, n, o]
+    # aa = [0.23373460057159642, 0.020627420771578593,
+    #       5.61478747481891, 0.989042781659751, 93.16512844374235]
 
     df = pd.read_csv(
         'C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\dataSet1.csv')
-    attributes = df.values[:, 0:5]
+    attributes = df.values[:, 1:6]
+    print(attributes)
     # print(len(attributes))
     label = df.values[:, 6]
+    print(label)
     # print(len(label))
     str(df)
 
     # print(attributes)
     # print(label)
-    from sklearn.model_selection import train_test_split
-
-    X_train, X_test, y_train, y_test = train_test_split(
-        attributes, label, test_size=0.1, random_state=42)
 
     from sklearn.ensemble import RandomForestClassifier
-    a = RandomForestClassifier(n_estimators=100)
+    a = RandomForestClassifier()
 
-    a.fit(X_train, y_train)
+    a.fit(attributes, label)
 
     predictedresult = a.predict([aa])
     print(predictedresult)
     print("ppp")
-
-    return str(predictedresult[0])
-    # return render_template('/doctor/doctor_detect.html')
+    res = predictedresult
+    # return str(predictedresult[0])
+    return render_template('/doctor/doctor_detect.html', res=res)
 
 
 if __name__ == "__main__":
