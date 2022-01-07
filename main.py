@@ -796,7 +796,7 @@ def user_login():
 def user_view_profile():
     v = Db()
     login_id = request.form['loginId']
-    qry = "select DATE_FORMAT(date_of_birth,'%d-%m-%y') as date_of_birth, name,gender,image,place,post,pin,email,contact from user where login_id ='"+login_id+"'"
+    qry = "select DATE_FORMAT(date_of_birth,'%d-%m-%y') as date_of_birth,name,gender,image,place,post,pin,email,contact from user where login_id ='"+login_id+"'"
     ans = v.selectOne(qry)
 
     ans = v.selectOne(qry)
@@ -825,7 +825,7 @@ def user_view_doctors():
 
     qry = "select * from doctor"
     ans = v.select(qry)
-    print(ans)
+    # print(ans)
     return jsonify(status="ok", data=ans)
 
 
@@ -1007,7 +1007,7 @@ def user_p_Page():
     qry = "select * from user where login_id ='"+login_id+"'"
     ans = v.selectOne(qry)
     if ans is not None:
-        return jsonify(status="ok", name=ans['name'], image=ans['image'])
+        return jsonify(status="ok", name=ans['name'], gender=ans['gender'], date_of_birth=ans['date_of_birth'], image=ans['image'], place=ans['place'], post=ans['post'], pin=ans['pin'], contact=ans['contact'], email=ans['email'])
     else:
         return jsonify(status="no")
 
