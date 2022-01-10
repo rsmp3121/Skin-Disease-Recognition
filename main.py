@@ -1321,8 +1321,106 @@ def doctor_Detect_Disease_post():
     print(predictedresult)
     print("ppp")
     res = predictedresult
+
     # return str(predictedresult[0])
     return render_template('/doctor/doctor_detect.html', res=res)
+
+
+@app.route('/user_Detect_Disease_post', methods=['post'])
+def user_Detect_Disease_post():
+    import numpy as np
+    from skimage import io, color, img_as_ubyte
+
+    from skimage.feature import greycomatrix, greycoprops
+    from sklearn.metrics.cluster import entropy
+    i = Db()
+    image = request.files['upload_Detect_Image']
+    image.save('C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\static\\userDisease_Images\\'+image.filename)
+    path = 'C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\userDisease_Images\\'+image.filename
+
+    rgbImg = io.imread(path)
+    grayImg = img_as_ubyte(color.rgb2gray(rgbImg))
+
+    distances = [1, 2, 3]
+    angles = [0, np.pi / 4, np.pi / 2, 3 * np.pi / 4]
+    properties = ['energy', 'homogeneity',
+                  'dissimilarity', 'correlation', 'contrast']
+
+    glcm = greycomatrix(grayImg,
+                        distances=distances,
+                        angles=angles,
+                        symmetric=True,
+                        normed=True)
+
+    feats = np.hstack([greycoprops(glcm, 'homogeneity').ravel()
+                       for prop in properties])
+    feats1 = np.hstack([greycoprops(glcm, 'energy').ravel()
+                        for prop in properties])
+    feats2 = np.hstack(
+        [greycoprops(glcm, 'dissimilarity').ravel() for prop in properties])
+    feats3 = np.hstack(
+        [greycoprops(glcm, 'correlation').ravel() for prop in properties])
+    feats4 = np.hstack([greycoprops(glcm, 'contrast').ravel()
+                        for prop in properties])
+
+    k = np.mean(feats)
+    l = np.mean(feats1)
+    m = np.mean(feats2)
+    n = np.mean(feats3)
+    o = np.mean(feats4)
+    print(k)
+    print(l)
+    print(m)
+    print(n)
+    print(o)
+
+    aa = [k, l, m, n, o]
+    # aa = [0.23373460057159642, 0.020627420771578593,
+    #       5.61478747481891, 0.989042781659751, 93.16512844374235]
+
+    df = pd.read_csv(
+        'C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\dataSet1.csv')
+    attributes = df.values[:, 1:6]
+    print(attributes)
+    # print(len(attributes))
+    label = df.values[:, 6]
+    print(label)
+    # print(len(label))
+    str(df)
+
+    # print(attributes)
+    # print(label)
+
+    from sklearn.ensemble import RandomForestClassifier
+    a = RandomForestClassifier()
+
+    a.fit(attributes, label)
+
+    predictedresult = a.predict([aa])
+    print(predictedresult)
+    print("ppp")
+    res = predictedresult
+    # return str(predictedresult[0])
+
+    qry = "select * from disease where name='"+res[0]+"'"
+    ans = i.selectOne(qry)
+
+    print(ans)
+
+    return jsonify(status="ok", name=ans['name'], image=ans['image'], descriptions=ans['descriptions'])
+
+
+@app.route('/user_view_doctors_search', methods=['post'])
+def user_view_doctors_search():
+
+    s = request.form["s"]
+
+    v = Db()
+
+    qry = "select * from doctor where name like '%"+s+"%'"
+    ans = v.select(qry)
+    # print(ans)
+    return jsonify(status="ok", data=ans)
 
 
 if __name__ == "__main__":
