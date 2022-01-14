@@ -1,3 +1,4 @@
+from sklearn.ensemble import RandomForestClassifier
 from logging import log
 from os import name, stat
 import os
@@ -1062,8 +1063,8 @@ def data_train():
     # img = cv2.imread(path)
     # aa = ['Acne and Rosacea Photos', 'Actinic Keratosis Basal Cell Carcinoma and other Malignant Lesions',
     #       'Atopic Dermatitis Photos', 'Bullous Disease Photos', 'Cellulitis Impetigo and other Bacterial Infections', 'Eczema Photos', 'Exanthems and Drug Eruptions', 'Herpes HPV and other STDs Photos', 'Light Diseases and Disorders of Pigmentation', 'Lupus and other Connective Tissue diseases', 'Melanoma Skin Cancer Nevi and Moles', 'Poison Ivy Photos and other Contact Dermatitis', 'Psoriasis pictures Lichen Planus and related diseases', 'Scabies Lyme Disease and other Infestations and Bites', 'Seborrheic Keratoses and other Benign Tumors', 'Systemic Disease', 'Tinea Ringworm Candidiasis and other Fungal Infections', 'Urticaria Hives', 'Vascular Tumors', 'Vasculitis Photos', 'Warts Molluscum and other Viral Infections']
-    aa = ['athelets_foot', 'cracked_heels', 'facial_acne',
-          'melona_on_the_nail_unit', 'rashes_affecting_lower_leg']
+    aa = ['athelets_foot', 'atopic dermatisis on hand', 'chicken_pox',
+          'cracked_heels', 'facial_acne']
     for i in aa:
         print(i)
     # search = str(input('Enter the folder name'))
@@ -1114,16 +1115,16 @@ def data_train():
             m = np.mean(feats2)
             n = np.mean(feats3)
             o = np.mean(feats4)
-            print(k)
-            print(l)
-            print(m)
-            print(n)
-            print(o)
+            # print(k)
+            # print(l)
+            # print(m)
+            # print(n)
+            # print(o)
 
             features.append([k, l, m, n, o])
             labels.append(myfolders)
             disease = myfolders
-            print(disease)
+            # print(disease)
             aa = [k, l, m, n, o, disease]
             alllist.append(aa)
             data = pd.DataFrame(
@@ -1140,7 +1141,7 @@ def data_train():
     from sklearn.ensemble import RandomForestClassifier
     a = RandomForestClassifier(n_estimators=100)
 
-    a.fit(X_train, y_train)
+    a.fit(features, labels)
 
     m = a.predict(X_test)
 
@@ -1299,23 +1300,23 @@ def doctor_Detect_Disease_post():
     # aa = [0.23373460057159642, 0.020627420771578593,
     #       5.61478747481891, 0.989042781659751, 93.16512844374235]
 
-    df = pd.read_csv(
-        'C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\dataSet1.csv')
-    attributes = df.values[:, 1:6]
-    print(attributes)
-    # print(len(attributes))
-    label = df.values[:, 6]
-    print(label)
-    # print(len(label))
-    str(df)
-
+    # df = pd.read_csv(
+    #     'C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\dataSet1.csv')
+    # attributes = df.values[:, 1:6]
     # print(attributes)
+    # # print(len(attributes))
+    # label = df.values[:, 6]
     # print(label)
+    # # print(len(label))
+    # str(df)
 
-    from sklearn.ensemble import RandomForestClassifier
-    a = RandomForestClassifier()
+    # # print(attributes)
+    # # print(label)
 
-    a.fit(attributes, label)
+    # from sklearn.ensemble import RandomForestClassifier
+    # a = RandomForestClassifier()
+
+    # a.fit(attributes, label)
 
     predictedresult = a.predict([aa])
     print(predictedresult)
@@ -1326,6 +1327,24 @@ def doctor_Detect_Disease_post():
     return render_template('/doctor/doctor_detect.html', res=res)
 
 
+df = pd.read_csv(
+    'C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\dataSet1.csv')
+attributes = df.values[:, 1:6]
+# print(attributes)
+# print(len(attributes))
+label = df.values[:, 6]
+# print(label)
+# print(len(label))
+# str(df)
+
+# print(attributes)
+# print(label)
+
+a = RandomForestClassifier()
+
+a.fit(attributes, label)
+
+
 @app.route('/user_Detect_Disease_post', methods=['post'])
 def user_Detect_Disease_post():
     import numpy as np
@@ -1334,9 +1353,13 @@ def user_Detect_Disease_post():
     from skimage.feature import greycomatrix, greycoprops
     from sklearn.metrics.cluster import entropy
     i = Db()
+
+    timestr = time.strftime("%Y%m%d-%H%M%S")
+    print(timestr)
+
     image = request.files['upload_Detect_Image']
-    image.save('C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\static\\userDisease_Images\\'+image.filename)
-    path = 'C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\userDisease_Images\\'+image.filename
+    image.save('C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\static\\userDisease_Images\\'+timestr+".jpg")
+    path = 'C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\userDisease_Images\\'+timestr+".jpg"
 
     rgbImg = io.imread(path)
     grayImg = img_as_ubyte(color.rgb2gray(rgbImg))
@@ -1368,33 +1391,16 @@ def user_Detect_Disease_post():
     m = np.mean(feats2)
     n = np.mean(feats3)
     o = np.mean(feats4)
-    print(k)
-    print(l)
-    print(m)
-    print(n)
-    print(o)
+
+    print(k, l, m, n, o)
+    # print(l)
+    # print(m)
+    # print(n)
+    # print(o)
 
     aa = [k, l, m, n, o]
     # aa = [0.23373460057159642, 0.020627420771578593,
     #       5.61478747481891, 0.989042781659751, 93.16512844374235]
-
-    df = pd.read_csv(
-        'C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\Skin-Disease-Recognition\\static\\dataSet1.csv')
-    attributes = df.values[:, 1:6]
-    print(attributes)
-    # print(len(attributes))
-    label = df.values[:, 6]
-    print(label)
-    # print(len(label))
-    str(df)
-
-    # print(attributes)
-    # print(label)
-
-    from sklearn.ensemble import RandomForestClassifier
-    a = RandomForestClassifier()
-
-    a.fit(attributes, label)
 
     predictedresult = a.predict([aa])
     print(predictedresult)
@@ -1403,6 +1409,7 @@ def user_Detect_Disease_post():
     # return str(predictedresult[0])
 
     qry = "select * from disease where name='"+res[0]+"'"
+    print(qry)
     ans = i.selectOne(qry)
 
     print(ans)
@@ -1424,4 +1431,4 @@ def user_view_doctors_search():
 
 
 if __name__ == "__main__":
-    app.run(port=5000, debug=True, host='0.0.0.0')
+    app.run(port=5000, debug=True, host='0.0.0.0', threaded=False)
