@@ -1,8 +1,10 @@
+from grpc import Status
+from flask_mail import Mail, Message
 from sklearn.ensemble import RandomForestClassifier
 from logging import log
 from os import name, stat
 import os
-from flask import Flask, json, render_template, request, session, url_for, jsonify
+from flask import Flask, json, render_template, request, session, url_for, jsonify, flash
 from flask.templating import render_template_string
 from skimage import feature
 from werkzeug.datastructures import Headers
@@ -16,8 +18,26 @@ import datetime
 from encodings.base64_codec import base64_decode
 import base64
 
+
 app = Flask(__name__)
 app.secret_key = "abc"
+
+
+# -----------------dont touch
+
+# mail = Mail(app)  # instantiate the mail class
+
+# configuration of mail
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USERNAME'] = 'dermz3121@gmail.com'
+app.config['MAIL_PASSWORD'] = '#3121dermz'
+app.config['MAIL_DEFAULT_SENDER'] = 'dermz3121@gmail.com'
+app.config['MAIL_USE_TLS'] = True
+# app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
+
+
 # -------------------------------------------------------------------------------------------------------------------------------#
 #Admin Begins#
 # -------------------------------------------------------------------------------------------------------------------------------#
@@ -317,6 +337,7 @@ def adm_login():
 @app.route("/adm_login_post", methods=['post'])
 def adm_login_post():
     i = Db()
+    error = None
     username = request.form['login_name']
     password = request.form['login_password']
     qry = "SELECT * FROM login WHERE username='" + \
@@ -326,18 +347,22 @@ def adm_login_post():
         type = ans['usertype']
         session["lid"] = ans["login_id"]
 
-        session['alid'] = "1"
         if type == 'admin':
+            session['alid'] = "1"
             # return render_template('/admin/Admin.html')
+
             return render_template('/admin/index.html')
 
         elif type == 'doctor':
-
+            session['alid'] = "2"
             return render_template('/doctor/home.html')
         else:
-            return "<script>alert('Invalid Username or Password');window.location='/'</script>"
+            error = 'Invalid credentials'
+            return render_template('/login.html', error=error)
+            # return "<script>alert('Invalid Username or Password');window.location='/'</script>"
     else:
-        return "<script>alert('Invalid Username or Password');window.location='/'</script>"
+        error = 'Invalid credentials'
+        return render_template('/login.html', error=error)
 
 
 #---------------login ends--------------------------------------#
@@ -404,7 +429,7 @@ def adm_view_user_post():
 # -----------------------------------doctor-view-disease-section-begins----------------------------------------------------------------#
 @app.route('/doctor_view_disease')
 def doctor_view_disease():
-    if session['alid'] == "1":
+    if session['alid'] == "2":
         v = Db()
         qry = "SELECT * FROM disease"
         res = v.select(qry)
@@ -415,7 +440,7 @@ def doctor_view_disease():
 
 @app.route('/doctor_view_disease_post', methods=['post'])
 def doctor_view_disease_post():
-    if session['alid'] == "1":
+    if session['alid'] == "2":
         s = Db()
         search_disease = request.form['disease_search_name']
         qry = "SELECT * FROM disease WHERE NAME LIKE '%"+search_disease+"%'"
@@ -434,7 +459,7 @@ def doctor_view_disease_post():
 
 @app.route('/doctor_schedule_management')
 def doctor_schedule_management():
-    if session['alid'] == "1":
+    if session['alid'] == "2":
         return render_template('/doctor/doctor_schedule_management.html')
     else:
         return redirect(url_for('adm_login'))
@@ -442,7 +467,7 @@ def doctor_schedule_management():
 
 @app.route('/doctor_schedule_management_post', methods=['post'])
 def doctor_schedule_management_post():
-    if session['alid'] == "1":
+    if session['alid'] == "2":
         i = Db()
         from_time = request.form['from_time']
         to_time = request.form['to_time']
@@ -460,7 +485,7 @@ def doctor_schedule_management_post():
 
 @app.route('/doctor_view_schedule')
 def doctor_view_schedule():
-    if session['alid'] == "1":
+    if session['alid'] == "2":
         v = Db()
         qry = "SELECT * FROM SCHEDULE WHERE doctor_id='" + \
             str(session['lid'])+"'"
@@ -473,7 +498,7 @@ def doctor_view_schedule():
 
 @app.route('/doctor_view_schedule_post', methods=['post'])
 def doctor_view_schedule_post():
-    if session['alid'] == "1":
+    if session['alid'] == "2":
         s = Db()
         from_date = request.form['search_from_date']
         to_date = request.form['search_to_date']
@@ -489,7 +514,7 @@ def doctor_view_schedule_post():
 
 @app.route('/doctor_edit_schedule/<schedule_id>')
 def doctor_edit_schedule(schedule_id):
-    if session['alid'] == "1":
+    if session['alid'] == "2":
         e = Db()
         session['schedule_id'] = schedule_id
         qry = "SELECT * FROM SCHEDULE WHERE schedule_id='" + schedule_id + "'"
@@ -503,7 +528,7 @@ def doctor_edit_schedule(schedule_id):
 
 @app.route('/doctor_edit_schedule_post', methods=['post'])
 def doctor_edit_schedule_post():
-    if session['alid'] == "1":
+    if session['alid'] == "2":
         e = Db()
         from_time = request.form['from_time']
         to_time = request.form['to_time']
@@ -519,7 +544,7 @@ def doctor_edit_schedule_post():
 
 @app.route('/doctor_delete_schedule/<schedule_id>')
 def doctor_delete_schedule(schedule_id):
-    if session['alid'] == "1":
+    if session['alid'] == "2":
         d = Db()
 
         qry = "DELETE FROM SCHEDULE WHERE schedule_id='"+schedule_id+"'"
@@ -537,7 +562,7 @@ def doctor_delete_schedule(schedule_id):
 
 @app.route('/doctor_view_profile')
 def doctor_view_profile():
-    if session['alid'] == "1":
+    if session['alid'] == "2":
         v = Db()
 
         qry = "SELECT * FROM doctor where login_id='"+str(session["lid"])+"'"
@@ -553,7 +578,7 @@ def doctor_view_profile():
 
 @app.route('/doctor_view_profile_post', methods=['post'])
 def doctor_view_profile_post():
-    if session['alid'] == "1":
+    if session['alid'] == "2":
         e = Db()
         lid = session['lid']
         name = request.form['edit_doctor_name']
@@ -602,7 +627,7 @@ def doctor_view_profile_post():
 
 @app.route('/doctor_view_user')
 def doctor_view_user():
-    if session['alid'] == "1":
+    if session['alid'] == "2":
         v = Db()
         qry = "SELECT * FROM user"
         ans = v.select(qry)
@@ -615,7 +640,7 @@ def doctor_view_user():
 
 @app.route('/doctor_view_user_post', methods=['post'])
 def doctor_view_user_post():
-    if session['alid'] == "1":
+    if session['alid'] == "2":
         v = Db()
         name = request.form['user_search_name']
         qry = "SELECT * FROM user WHERE NAME LIKE '%" + \
@@ -634,7 +659,7 @@ def doctor_view_user_post():
 
 @app.route('/doctor_change_password')
 def doctor_change_password():
-    if session['alid'] == "1":
+    if session['alid'] == "2":
         return render_template('/doctor/doctor_change_password.html')
 
     else:
@@ -643,7 +668,7 @@ def doctor_change_password():
 
 @app.route('/doctor_change_password_post', methods=['post'])
 def doctor_change_password_post():
-    if session['alid'] == "1":
+    if session['alid'] == "2":
         v = Db()
         current_password = request.form['current_password']
         new_password = request.form['new_password']
@@ -1063,8 +1088,8 @@ def data_train():
     # img = cv2.imread(path)
     # aa = ['Acne and Rosacea Photos', 'Actinic Keratosis Basal Cell Carcinoma and other Malignant Lesions',
     #       'Atopic Dermatitis Photos', 'Bullous Disease Photos', 'Cellulitis Impetigo and other Bacterial Infections', 'Eczema Photos', 'Exanthems and Drug Eruptions', 'Herpes HPV and other STDs Photos', 'Light Diseases and Disorders of Pigmentation', 'Lupus and other Connective Tissue diseases', 'Melanoma Skin Cancer Nevi and Moles', 'Poison Ivy Photos and other Contact Dermatitis', 'Psoriasis pictures Lichen Planus and related diseases', 'Scabies Lyme Disease and other Infestations and Bites', 'Seborrheic Keratoses and other Benign Tumors', 'Systemic Disease', 'Tinea Ringworm Candidiasis and other Fungal Infections', 'Urticaria Hives', 'Vascular Tumors', 'Vasculitis Photos', 'Warts Molluscum and other Viral Infections']
-    aa = ['athelets_foot', 'atopic dermatisis on hand', 'black mole', 'chicken_pox',
-          'cracked_heels', 'facial_acne']
+    aa = ['athelets_foot', 'atopic_dermatisis_on_hand', 'black_mole', 'chicken_pox',
+          'cracked_heels', 'facial_acne', 'normal_skin_body', 'normal_skin_face', 'normal_skin_hand', 'normal_skin_leg']
     for i in aa:
         print(i)
     # search = str(input('Enter the folder name'))
@@ -1083,6 +1108,8 @@ def data_train():
         path = 'C:\\Users\\rsmp\\Desktop\\dataSet_New\\train\\' + \
             str(myfolders)
 
+        # path = 'C:\\Users\\rsmp\\Desktop\\Skin_Disease_Recognition_Project\\dataset_train_backup\\datasetBackup-17-01-22\\train\\' + \
+        #     str(myfolders)
         a = os.listdir(path)
         for ii in a:
             rgbImg = io.imread(str(path+"\\"+str(ii)))
@@ -1242,7 +1269,7 @@ def testing():
 
 @app.route('/doctor_Detect_Disease')
 def doctor_Detect_Disease():
-    if session['alid'] == "1":
+    if session['alid'] == "2":
         return render_template('/doctor/doctor_detect.html')
     else:
         return redirect(url_for('adm_login'))
@@ -1319,12 +1346,23 @@ def doctor_Detect_Disease_post():
     # a.fit(attributes, label)
 
     predictedresult = a.predict([aa])
-    print(predictedresult)
-    print("ppp")
-    res = predictedresult
-
+    res = str(predictedresult)[1:-1]
+    print(res)
+    if res == 'normal_skin_body' or res == 'normal_skin_face' or res == 'normal_skin_hand' or res == 'normal_skin_leg':
+        res1 = "normal skin conditions no ubnormalities detected"
+        print(res1)
+    else:
+        print("skin conditions ubnormalities")
+    res = res.replace("'", "")
+    res1 = res.replace('_', " ")
+    qry = "select * from disease where name='"+res1+"'"
+    i = Db()
+    ans = i.selectOne(qry)
+    print('---------------------')
+    print(ans)
+    print(msg)
     # return str(predictedresult[0])
-    return render_template('/doctor/doctor_detect.html', res=res)
+    return render_template('/doctor/doctor_detect.html', res=res1)
 
 
 df = pd.read_csv(
@@ -1428,6 +1466,77 @@ def user_view_doctors_search():
     ans = v.select(qry)
     # print(ans)
     return jsonify(status="ok", data=ans)
+
+
+@app.route('/user_Change_Password', methods=['post'])
+def user_Change_Password():
+    i = Db()
+
+    lid = request.form['lid']
+    confirmPass = request.form['confirm_password']
+    qry = "update login set password='"+confirmPass+"' where login_id='"+lid+"'"
+    ans = i.update(qry)
+    return jsonify(status="ok")
+
+
+# @app.route('/and_forgetpassword', methods=['post'])
+# def forget_Password():
+#     i = Db()
+#     import random
+#     # password = random.randint(1000, 10000)
+#     email = request.form['email']
+#     user = 'user'
+#     qry = "select * from login where username='"+email+"' and usertype='"+user+"'"
+#     print(qry)
+#     ans = i.selectOne(qry)
+#     print(ans)
+#     if ans != None:
+
+#         msg = Message(subject="Hello", sender='dermz3121@gmail.com', recipients=[email],
+#                       body="  Your password for login is : "+str(ans["password"]))
+
+#         mail.send(msg)
+#         return jsonify(status="ok")
+
+#     else:
+#         return jsonify(status="not")
+@app.route('/and_forgetpassword', methods=['post'])
+def forget_Password():
+    i = Db()
+    lid = request.form['lid']
+    import random
+    password = random.randint(1000, 10000)
+    pass1 = str(password)
+
+    qry1 = "update login set password='"+pass1+"' where login_id='"+lid+"'"
+    ans1 = i.insert(qry1)
+    print(ans1)
+
+    email = request.form['email']
+    user = 'user'
+    qry = "select * from login where username='"+email+"' and usertype='"+user+"'"
+    print(qry)
+    ans = i.selectOne(qry)
+    print(ans)
+    if ans != None:
+
+        msg = Message(subject="Hello There", sender='dermz3121@gmail.com', recipients=[email],
+                      body="  Your password for login is : "+str(ans["password"]))
+
+        mail.send(msg)
+        return jsonify(status="ok")
+
+    else:
+        return jsonify(status="not")
+
+
+# @app.route('/doctor_view_booked')
+# def doctor_view_booked():
+#     lid = request.form['login_id']
+#     v = Db()
+#     qry = "select name,book_id from user,book where login_id='"+lid+"'"
+#     ans = v.selectOne(qry)
+#     return ans
 
 
 if __name__ == "__main__":
