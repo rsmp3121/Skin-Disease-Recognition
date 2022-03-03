@@ -1,0 +1,81 @@
+{% extends"doctor/home.html" %} {% block body %}
+<body>
+  <form id="form1" name="form1" method="post" action='/doctor_view_booked_post'>
+    <table class="table table-hover">
+      <tr>
+        <td>
+          <input
+            type="text"
+            name="user_search_name"
+            class="form-control"
+            id="textfield"
+            placeholder="Enter Your Search Text"
+            required
+          />
+        </td>
+        <td>
+          <input
+            type="submit"
+            name="button"
+            id="button"
+            class="btn btn-outline-primary"
+            value="Search"
+          />
+        </td>
+      </tr>
+    </table>
+    <table class="table table-hover">
+      <tr>
+        <td width="39" height="61">
+          <div align="center">
+            <em><strong>slno</strong></em>
+          </div>
+        </td>
+        <td width="132">
+          <div align="center">
+            <em><strong>Name</strong></em>
+          </div>
+        </td>
+        <td width="146">
+          <p align="center">
+            <em><strong>Contact </strong></em>
+          </p>
+          <td width="146"><p align="center">
+            <em><strong>Date</strong></em>
+          </p></td>
+          
+        </td>
+        <td width="148">
+          <div align="center">
+            <em><strong>From</strong></em>
+          </div>
+        </td>
+        <td width="152">
+          <div align="center">
+            <em><strong>To</strong></em>
+          </div>
+        </td>
+    
+        <td width="154">
+          <div align="center">
+            <em><strong></strong></em>
+          </div>
+        </td>
+      </tr>
+      {%for i in val%}
+      <tr align="center">
+        <td height="58">{{loop.index}}</td>
+        <td>{{i['name']}}</td>
+        <td>
+          {{i['email']}}<br />
+          {{i['contact']}}
+        </td>
+        <td>{{i['date']}}</td>
+        <td>{{i['from_time']}}</td>
+        <td>{{i['to_time']}}</td>
+      </tr>
+      {%endfor%}
+    </table>
+  </form>
+</body>
+{% endblock %}

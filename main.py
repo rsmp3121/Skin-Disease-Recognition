@@ -992,10 +992,10 @@ def userviewmyshedule():
     lid = request.form['lid']
     timestr = time.strftime("%d-%m-%Y")
     qry = "SELECT `book`.*,`schedule`.*,`doctor`.`name`,`doctor`.`qualification` FROM `doctor`,`schedule`,`book`,USER WHERE `book`.`schedule_id`=`schedule`.`schedule_id` AND `book`.`user_id`=`user`.`login_id` AND `user`.`login_id`='" + \
-        lid+"''' AND `schedule`.`doctor_id`=`doctor`.`login_id`"
+        lid+"''' AND `schedule`.`doctor_id`=`doctor`.`login_id` ORDER BY `book`.`book_id` desc"
     res = i.select(qry)
-    print('--------------------------')
-    print(res)
+    # print('--------------------------')
+    # print(res)
     return jsonify(status="ok", data=res)
 
 
@@ -1530,13 +1530,113 @@ def forget_Password():
         return jsonify(status="not")
 
 
-# @app.route('/doctor_view_booked')
-# def doctor_view_booked():
-#     lid = request.form['login_id']
-#     v = Db()
-#     qry = "select name,book_id from user,book where login_id='"+lid+"'"
-#     ans = v.selectOne(qry)
-#     return ans
+@app.route('/doctor_view_booked')
+def doctor_view_booked():
+    lid = session['lid']
+    v = Db()
+    qry = "SELECT schedule.*,book.*, user.* FROM book INNER JOIN USER ON book.user_id=user.login_id INNER JOIN SCHEDULE ON schedule.schedule_id=book.schedule_id WHERE schedule.doctor_id = '" + \
+        str(lid)+"'"
+    ans = v.select(qry)
+    print(ans)
+    # return ans
+    return render_template('/doctor/doctor_view_booked.html', val=ans)
+
+
+@app.route('/doctor_view_booked_post', methods=['post'])
+def doctor_view_booked_post():
+    if session['alid'] == "2":
+        v = Db()
+        name = request.form['user_search_name']
+        qry = "SELECT * FROM user,schedule WHERE user.NAME LIKE '%" + \
+            name+"%' "
+        res = v.select(qry)
+
+        return render_template('/doctor/doctor_view_booked.html', val=res)
+
+    else:
+        return redirect(url_for('adm_login'))
+
+
+# @app.route('/doctor_forgetPassword')
+# def doctor_forgetPassword():
+#     return render_template('/doctor/doctor_forget_password.html')
+
+
+# @app.route('/doctor_forgetPassword_post', methods=['post'])
+# def doctor_forgetPassword_post():
+#     i = Db()
+
+#     import random
+#     password = random.randint(1000, 10000)
+#     pass1 = str(password)
+#     if session['alid'] == "1":
+#         forget_uname = request.form['forget_name']
+#         qry2 = "select * from login where username='"+forget_uname+"'"
+#         ans2 = i.select(qry2)
+
+#         qry1 = "update login set password='"+pass1+"' where login_id='"+lid+"'"
+#         ans1 = i.update(qry1)
+#         print(ans1)
+
+#         user = 'doctor'
+#         qry = "select * from login where username='" + \
+#             forget_uname+"' and usertype='"+user+"'"
+#         print(qry)
+#         ans = i.selectOne(qry)
+#         print(ans)
+#         if ans != None:
+#             msg = Message(subject="Hello There", sender='dermz3121@gmail.com', recipients=[forget_uname],
+#                           body="  Your password for login is : "+str(ans["password"]))
+
+#             mail.send(msg)
+#             return render_template('/doctor/doctor_forget_password.html')
+
+#         else:
+#             return "errror"
+
+# ----------------------------------------------------------------------------
+
+
+# @app.route('/doctor_forgetPassword_post', methods=['post'])
+# def doctor_forgetPassword_post():
+#     db= Db()
+#     email=request.form['email']
+#     qry="SELECT * FROM login WHERE username='"+email+"'"
+#     res=db.selectOne(qry)
+#     if res is not None:
+#         type = res["type"]
+#         log_id=str(res["log_id"])
+#         password=res["password"]
+#         if (type == "admin"):
+#             name="admin"
+#         elif type == "parent":
+#             qry1="SELECT * FROM parents WHERE log_id='"+log_id+"'"
+#             res1=db.selectOne(qry1)
+#             name=res1["name"]
+#         elif type == "teacher":
+#             qry2="SELECT * FROM teachers WHERE log_id='"+log_id+"'"
+#             res2=db.selectOne(qry2)
+#             name=res2["name"]
+#         else:
+#             name=""
+#         if name !="":
+#             s = smtplib.SMTP(host='smtp.gmail.com', port=587)
+#             s.starttls()
+#             s.login("malabrkidslearning@gmail.com", "kids@malabar")
+#             msg = MIMEMultipart()  # create a message.........."
+#             message = "Messege from DNTL"
+#             msg['From'] = "malabrkidslearning@gmail.com"
+#             msg['To'] = email
+#             msg['Subject'] = "Hai "+name+" Your Password For Kids Learning Web App"
+#             body = "Your Account Password Reset Successfully. You Can login using This password - " + str(password)
+#             msg.attach(MIMEText(body, 'plain'))
+#             s.send_message(msg)
+#             return '''<script>alert (" We have emailed your password ! ");window.location='/'</script>'''
+#         else:
+#              return '''<script>alert (" Invalid user ! ");window.location='/resetpassword'</script>'''
+
+#     else:
+#          return '''<script>alert (" Invalid user ! ");window.location='/resetpassword'</script>'''
 
 
 if __name__ == "__main__":
